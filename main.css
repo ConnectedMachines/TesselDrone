@@ -2,6 +2,10 @@ body{
   margin: 0;
 }
 
+/***************************************************
+nav-bar styles
+***************************************************/
+
 #nav-bar{
   position: absolute;
   box-sizing: border-box;
@@ -21,6 +25,10 @@ body{
   right: 10px;
 }
 
+/***************************************************
+generic container styles
+***************************************************/
+
 #main-container{
   position: absolute;
   box-sizing: border-box;
@@ -34,6 +42,10 @@ body{
   border: solid black 2px;
 }
 
+/***************************************************
+drone control styles
+***************************************************/
+
 .drone-control{
   position: absolute;
   width: 50%;
@@ -41,12 +53,20 @@ body{
   left: 0;
 }
 
+/***************************************************
+visualizer styles
+***************************************************/
+
 .visualizer{
   position: absolute;
   width: 50%;
   height: 50%;
   right: 0;
 }
+
+/***************************************************
+log styles
+***************************************************/
 
 .drone-log{
   position: absolute;

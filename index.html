@@ -9,9 +9,23 @@
       <div id="logout-button">logout</div>
     </div>
     <div id="main-container">
-      <div class="drone-control container">control</div>
-      <div class="visualizer container">visual</div>
-      <div class="drone-log container">log</div>
+      <div class="drone-control container">
+        <div class="control-panel">control panel</div>
+      </div>
+      <div class="visualizer container">
+        <canvas id="threejs-canvas"></canvas>
+      </div>
+      <div class="drone-log container">
+        <div class="log-output">
+          drone inactive...
+        </div>
+        <div class="log-input">
+          <form>
+            <input></input>
+            <button>submit</button>
+          </form>
+        </div>
+      </div>
     <div>
   </body>
 </html>
