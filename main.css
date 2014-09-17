@@ -1,17 +1,29 @@
-#nav-bar{
-
+body{
+  margin: 0;
 }
 
-#nav-bar:h2{
+#nav-bar{
+  position: absolute;
+  box-sizing: border-box;
+  border-bottom: solid black 2px;
+  width: 100vw;
+}
 
+#nav-bar h2{
+  display: inline;
 }
 
 #logout-button{
-
+  position: absolute;
+  display: inline;
+  border: solid black 1px;
+  top: 5px;
+  right: 10px;
 }
 
 #main-container{
-
+  position: absolute;
+  box-sizing: border-box;
 }
 
 .container{
@@ -27,7 +39,7 @@
 }
 
 .drone-log{
-  
+
 }
 
 
