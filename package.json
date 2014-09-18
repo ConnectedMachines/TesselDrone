@@ -1,0 +1,30 @@
+{
+  "name": "Mad-Props",
+  "version": "0.0.1",
+  "description": "Tessel drone - Hack Reactor Thesis",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ConnectedMachines/MadProps.git"
+  },
+  "author": "Connected Machines",
+  "bugs": {
+    "url": "https://github.com/ConnectedMachines/MadProps/issues"
+  },
+  "dependencies": {
+    "angular":"^1.2.23",
+    "d3":"^3.4.11"
+  },
+  "devDependencies": {
+    "gulp":"^3.8.8",
+    "jasmine":"^2.0.1",
+    "jasmine-node":"^1.14.5",
+    "gulp-jasmine":"^1.0.1",
+    "gulp-jshint":"^1.8.4",
+    "gulp-uglify":"^1.0.1",
+    "gulp-concat":"^2.4.1",
+    "gulp-watch":"^1.0.5"
+  }
+}
