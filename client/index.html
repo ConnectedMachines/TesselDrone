@@ -1,0 +1,50 @@
+<html>
+  <head>
+    <title>Mad Props</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+  </head>
+  <body>
+    <!-- dependency scripts -->
+    <script src="../node_modules/angular/lib/angular.min.js"></script>
+    <script src="../node_modules/d3/d3.min.js"></script>
+
+    <!-- app scripts -->
+    <script src="app.js"></script>
+    <script src="drone_control/controller.js"></script>
+
+    <!-- nav-bar -->
+    <div id="nav-bar">
+      <h2>Mad Props</h2>
+      <div id="logout-button">logout</div>
+    </div>
+    <div id="main-container" ng-app="MadProps">
+
+      <!-- drone control -->
+      <div class="drone-control container" ng-controller="DroneCommandController">
+        <div class="control-panel">
+          <button class="control-button"ng-click="preflightTest()">Preflight Test</button>
+          <button class="control-button"ng-click="takeoff()">Take Off!</button>
+          <button class="control-button"ng-click="land()">Land Drone</button>
+        </div>
+      </div>
+
+      <!-- visualization -->
+      <div class="visualizer container" >
+
+      </div>
+
+      <!-- log -->
+      <div class="drone-log container">
+        <div class="log-output">
+          drone inactive...
+        </div>
+        <div class="log-input">
+          <form>
+            <input></input>
+            <button>submit</button>
+          </form>
+        </div>
+      </div>
+    <div>
+  </body>
+</html>
