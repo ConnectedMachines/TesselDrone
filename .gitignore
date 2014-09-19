@@ -27,4 +27,6 @@ node_modules
 # Users Environment Variables
 .lock-wscript
 
+# Mac OS X file structure artifacts
 .DS_Store
+

@@ -1,1 +1,1 @@
-angular.module('MadProps', []);
+angular.module('MadProps', ['d3']);

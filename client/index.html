@@ -6,11 +6,13 @@
   <body>
     <!-- dependency scripts -->
     <script src="../node_modules/angular/lib/angular.min.js"></script>
-    <script src="../node_modules/d3/d3.min.js"></script>
 
     <!-- app scripts -->
+    <script src="d3Angular.js"></script>
     <script src="app.js"></script>
     <script src="drone_control/controller.js"></script>
+    <script src="d3_visualizer/controller.js"></script>
+    <script src="d3_visualizer/d3Directives/droneStatus.js"></script>
 
     <!-- nav-bar -->
     <div id="nav-bar">
@@ -30,7 +32,7 @@
 
       <!-- visualization -->
       <div class="visualizer container" ng-controller="D3VisualizerController">
-
+        <div dronestatus ></div>
       </div>
 
       <!-- log -->
