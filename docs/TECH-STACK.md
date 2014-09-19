@@ -1,0 +1,24 @@
+- Client:
+  - Angular
+  - D3
+  - Three.js
+  - Stylus
+  - Material Design
+- Web Server:
+  - Express
+- Testing:
+  - Karma
+  - Jasmine
+  - JSHint
+  - Coveralls
+- Deployment:
+  - Gulp
+  - Travis-CI
+  - GitHub
+  - Azure
+- Hardware
+  - Tessel (Node.js, Colony, Lua)
+  - IMU (accelerometer & gyroscope)
+  - servo controller
+  - ultrasonic rangefinder
+  - ESC (SimonK firmware)
