@@ -1,5 +1,5 @@
 angular.module('MadProps')
-  .directive('dronestatus', ['d3Service', function(d3Service){
+  .directive('dronestatus', ['d3Service', '$window', function(d3Service, $window){
     return {
       restrict: 'EA',
       scope: {},

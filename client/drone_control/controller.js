@@ -1,4 +1,4 @@
 angular.module('MadProps')
-  .controller('DroneCommandController', ['$scope', '$window', function($scope, $window){
+  .controller('DroneCommandController', ['$scope', function($scope){
     
   }]);
