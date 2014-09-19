@@ -1,0 +1,27 @@
+{
+  "name": "MadProps",
+  "version": "1.0.0",
+  "description": "MadProps",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ConnectedMachines/MadProps.git"
+  },
+  "scripts": {
+    "test": "gulp test"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ConnectedMachines/MadProps/issues"
+  },
+  "homepage": "https://github.com/ConnectedMachines/MadProps",
+  "dependencies": {
+    "gulp": "^3.8.8",
+    "gulp-jshint": "^1.8.4",
+    "gulp-karma": "0.0.4",
+    "jshint-stylish": "^0.4.0",
+    "karma": "^0.12.23",
+    "karma-jasmine": "^0.2.2",
+    "karma-phantomjs-launcher": "^0.1.4",
+    "karma-spec-reporter": "0.0.13"
+  }
+}
