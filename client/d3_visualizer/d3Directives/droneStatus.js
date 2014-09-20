@@ -6,7 +6,7 @@ angular.module('MadProps')
       link: function(scope, element, attrs){
         d3Service.d3().then(function(d3){
           // create the svg element inside the container
-          scope.propellerData = [
+          var propellerData = [
             {
               id: 0,
               pos: [200,50],
@@ -61,31 +61,47 @@ angular.module('MadProps')
             .attr('height', function(d){ return d.dim[1] })
             .attr('fill', function(d){ return d.color });
 
-          var propellers = svg.selectAll('circle')
-            .data(scope.propellerData)
-            .enter()
-            .append('circle')
-            .attr('cx', function(d){ return d.pos[0] })
-            .attr('cy', function(d){ return d.pos[1] })
-            .attr('r', function(d){ return d.radius })
-            .attr('fill', function(d){ return d.color });
+          var renderPropellers = function(){
+            var propellers = svg.selectAll('circle');
+            if(!propellers[0].length){
+              svg.selectAll('circle')
+                .data(propellerData)
+                .enter()
+                .append('circle')
+                .attr('cx', function(d){ return d.pos[0] })
+                .attr('cy', function(d){ return d.pos[1] })
+                .attr('r', function(d){ return d.radius })
+                .attr('fill', function(d){ return d.color });
+            }else{
+              svg.selectAll('circle')
+                .data(propellerData)
+                .transition()
+                .attr('cx', function(d){ return d.pos[0] })
+                .attr('cy', function(d){ return d.pos[1] })
+                .attr('r', function(d){ return d.radius })
+                .attr('fill', function(d){ return d.color });
+            }
+          }
+          renderPropellers();
 
-          // // browser onresize event
-          // window.onresize = function(){
-          //   scope.$apply();
-          // };
+          Object.defineProperty(scope, 'propellerData', {
+            enumerable: true,
+            configurable: true,
+            get: function(){
+              // update propellers as soon as call stack is empty
+              setTimeout(function(){
+                renderPropellers();
+              }, 0);
+              return propellerData;
+            },
+            set: function(dataArr){
+              propellerData = dataArr;
+              renderPropellers();
+            }
+          });
 
-          // // watch for resize event
-          // scope.$watch(function(){
-          //   return angular.element($window)[0].innerWidth;
-          // }, function(){
-          //   scope.render(scope.data);
-          // });
-
-          // scope.render = function(data){
-          //   // remove all previous items before render
-          //   //svg.selectAll('*').remove();
-          // };
+          // flag to trigger data manipulation in the controller
+          scope.visualizationIsLoaded = true;
         });
       }
     }
