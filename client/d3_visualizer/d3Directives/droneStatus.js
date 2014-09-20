@@ -6,7 +6,7 @@ angular.module('MadProps')
       link: function(scope, element, attrs){
         d3Service.d3().then(function(d3){
           // create the svg element inside the container
-          var propellerData = [
+          scope.propellerData = [
             {
               id: 0,
               pos: [200,50],
@@ -61,44 +61,26 @@ angular.module('MadProps')
             .attr('height', function(d){ return d.dim[1] })
             .attr('fill', function(d){ return d.color });
 
-          var renderPropellers = function(){
+          scope.renderPropellers = function(){
             var propellers = svg.selectAll('circle');
             if(!propellers[0].length){
               svg.selectAll('circle')
-                .data(propellerData)
+                .data(scope.propellerData)
                 .enter()
                 .append('circle')
                 .attr('cx', function(d){ return d.pos[0] })
                 .attr('cy', function(d){ return d.pos[1] })
                 .attr('r', function(d){ return d.radius })
-                .attr('fill', function(d){ return d.color });
+                .style('fill', function(d){ return d.color });
             }else{
               svg.selectAll('circle')
-                .data(propellerData)
+                .data(scope.propellerData)
                 .transition()
-                .attr('cx', function(d){ return d.pos[0] })
-                .attr('cy', function(d){ return d.pos[1] })
-                .attr('r', function(d){ return d.radius })
-                .attr('fill', function(d){ return d.color });
+                .duration(500)
+                .style('fill', function(d){ return d.color });
             }
           }
-          renderPropellers();
-
-          Object.defineProperty(scope, 'propellerData', {
-            enumerable: true,
-            configurable: true,
-            get: function(){
-              // update propellers as soon as call stack is empty
-              setTimeout(function(){
-                renderPropellers();
-              }, 0);
-              return propellerData;
-            },
-            set: function(dataArr){
-              propellerData = dataArr;
-              renderPropellers();
-            }
-          });
+          scope.renderPropellers();
 
           // flag to trigger data manipulation in the controller
           scope.visualizationIsLoaded = true;
