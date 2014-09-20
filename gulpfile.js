@@ -14,8 +14,6 @@ gulp.task('lint', function(){
 gulp.task('test', function (done) {
   karma.start({
     // Import Karma with settings from karma.conf.js.
-    configFile: __dirname + '/karma.conf.js',
-    // Make Karma exit after tests finish.
-    singleRun: true
+    configFile: __dirname + '/karma.conf.js'
   }, done);
 });

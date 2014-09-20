@@ -16,6 +16,8 @@
   "homepage": "https://github.com/ConnectedMachines/MadProps",
   "dependencies": {
     "angular":"^1.2.23",
+    "angular-mocks":"^1.2.22",
+    "jquery":"^2.1.1",
     "d3":"^3.4.11",
     "gulp": "^3.8.8",
     "gulp-jshint": "^1.8.4",
@@ -24,6 +26,7 @@
     "karma": "^0.12.23",
     "karma-jasmine": "^0.2.2",
     "karma-phantomjs-launcher": "^0.1.4",
+    "karma-chrome-launcher":"^0.1.4",
     "karma-spec-reporter": "0.0.13"
   }
 }
