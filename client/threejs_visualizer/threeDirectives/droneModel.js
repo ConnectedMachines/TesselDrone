@@ -60,6 +60,30 @@ angular.module('MadProps')
             loader.load(options.pathURL);
           }
 
+          {/************ 3D Workspace upper edge ******************/
+            var matteBlue = new THREE.MeshLambertMaterial({color: 0x0000ff});
+            var matteRed = new THREE.MeshLambertMaterial({color: 0xff0000});
+            var matteGreen = new THREE.MeshLambertMaterial({color: 0x00ff00});
+            var drone = new THREE.Object3D();
+
+            // load frame
+            assetLoader(drone, {
+              material: matteBlue,
+              pathURL: 'assets/diy_mini_quad_v3_one_piece.stl',
+              scale: 0.5,
+              position: [0,0,0],
+              rotation: [
+                THREE.Math.degToRad(90),// x
+                THREE.Math.degToRad(0), // y
+                THREE.Math.degToRad(0)  // z
+              ]
+            });
+
+            
+
+            scene.add(drone);
+          }/************ 3D Workspace lower edge ******************/
+
           // the render loop
           var render = function () {
             requestAnimationFrame(render);
