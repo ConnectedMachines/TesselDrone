@@ -39,7 +39,7 @@ angular.module('MadProps')
             }
 
           ******************************************************/
-          var assetLoader = function(context, options){
+          var assetLoader = function(context, options, callback){
             var loader = new THREE.STLLoader();
             loader.addEventListener('load', function(event){
               var geometry = event.content;
@@ -56,6 +56,9 @@ angular.module('MadProps')
               }
 
               context.add(model);
+              if(callback){
+                callback();
+              }
             });
             loader.load(options.pathURL);
           }
@@ -64,24 +67,79 @@ angular.module('MadProps')
             var matteBlue = new THREE.MeshLambertMaterial({color: 0x0000ff});
             var matteRed = new THREE.MeshLambertMaterial({color: 0xff0000});
             var matteGreen = new THREE.MeshLambertMaterial({color: 0x00ff00});
-            var drone = new THREE.Object3D();
 
-            // load frame
-            assetLoader(drone, {
-              material: matteBlue,
-              pathURL: 'assets/diy_mini_quad_v3_one_piece.stl',
-              scale: 0.5,
-              position: [0,0,0],
-              rotation: [
-                THREE.Math.degToRad(90),// x
-                THREE.Math.degToRad(0), // y
-                THREE.Math.degToRad(0)  // z
-              ]
-            });
+            var loadComplete = false;
+            var drone = new THREE.Object3D();
+                // load frame
+                assetLoader(drone, {
+                  material: matteBlue,
+                  pathURL: 'assets/diy_mini_quad_v3_one_piece.stl',
+                  scale: 0.5,
+                  position: [0,0,0],
+                  rotation: [
+                    THREE.Math.degToRad(90),// x
+                    THREE.Math.degToRad(0), // y
+                    THREE.Math.degToRad(0)  // z
+                  ]
+                });
+
+                // create template engine with left prop
+                var engineTemplate_L = new THREE.Object3D();
+                    // load motor
+                    assetLoader(engineTemplate_L, {
+                      material: matteGreen,
+                      pathURL: 'assets/N5065_Motor.stl',
+                      scale: 3,
+                      position: [0,0,0],
+                      rotation: [
+                        THREE.Math.degToRad(90),// x
+                        THREE.Math.degToRad(0), // y
+                        THREE.Math.degToRad(0)  // z
+                      ]
+                    });
+
+                    // load left prop
+                    assetLoader(engineTemplate_L, {
+                      material: matteRed,
+                      pathURL: 'assets/prop_left.stl',
+                      scale: 0.5,
+                      position: [0,13.5,0],
+                      rotation: [
+                        THREE.Math.degToRad(90),// x
+                        THREE.Math.degToRad(0), // y
+                        THREE.Math.degToRad(0)  // z
+                      ]
+                    });
+
+                // create template engine with right prop
+                var engineTemplate_R = new THREE.Object3D();
+                    // load motor
+                    assetLoader(engineTemplate_R, {
+                      material: matteGreen,
+                      pathURL: 'assets/N5065_Motor.stl',
+                      scale: 3,
+                      position: [0,0,0],
+                      rotation: [
+                        THREE.Math.degToRad(90),// x
+                        THREE.Math.degToRad(0), // y
+                        THREE.Math.degToRad(0)  // z
+                      ]
+                    });
+
+                    // load right prop
+                    assetLoader(engineTemplate_R, {
+                      material: matteRed,
+                      pathURL: 'assets/prop_right.stl',
+                      scale: 0.5,
+                      position: [0,13.5,0],
+                      rotation: [
+                        THREE.Math.degToRad(90),// x
+                        THREE.Math.degToRad(0), // y
+                        THREE.Math.degToRad(0)  // z
+                      ]
+                    });
 
             
-
-            scene.add(drone);
           }/************ 3D Workspace lower edge ******************/
 
           // the render loop
