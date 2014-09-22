@@ -1,0 +1,80 @@
+body{
+  margin: 0;
+}
+
+/***************************************************
+nav-bar styles
+***************************************************/
+
+#nav-bar{
+  position: absolute;
+  box-sizing: border-box;
+  border-bottom: solid black 2px;
+  width: 100vw;
+}
+
+#nav-bar h2{
+  display: inline;
+}
+
+#logout-button{
+  position: absolute;
+  display: inline;
+  border: solid black 1px;
+  top: 5px;
+  right: 10px;
+}
+
+/***************************************************
+generic container styles
+***************************************************/
+
+#main-container{
+  position: absolute;
+  box-sizing: border-box;
+  top: 30px;
+  width: 100vw;
+  height: 750px;
+}
+
+.container{
+  box-sizing: border-box;
+  border: solid black 2px;
+}
+
+/***************************************************
+drone control styles
+***************************************************/
+
+.drone-control{
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  left: 0;
+}
+
+/***************************************************
+visualizer styles
+***************************************************/
+
+.visualizer{
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  right: 0;
+}
+
+/***************************************************
+log styles
+***************************************************/
+
+.drone-log{
+  position: absolute;
+  width: 100%;
+  height: 50%;
+  bottom: 0;
+}
+
+
+
+
