@@ -7,6 +7,7 @@
   fetch = +refs/heads/*:refs/remotes/upstream/*
 ```
 4. Make sure you have [node.js](http://nodejs.org/download/) installed.
-5. Install gulp: <code>$ npm install gulp --global</code>
-6. Build dependencies <code>$ npm install</code>
-7. Run <code>$ gulp</code> to build, test, and start everything!
+5. Install Gulp CLI: <code>$ npm install gulp --global</code>
+6. Install Tessel CLI: <code>$ npm install tessel --global</code>
+7. Build dependencies <code>$ npm install</code>
+8. Run <code>$ gulp</code> to build, test, and start everything!
