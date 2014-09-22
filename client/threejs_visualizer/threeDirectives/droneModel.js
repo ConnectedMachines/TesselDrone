@@ -26,6 +26,40 @@ angular.module('MadProps')
           // move camera towards screen to [0,0,100]
           camera.position.z = 100;
 
+          /******************************************************
+          loader
+
+          example options:
+            {
+              material: 
+              pathURL: './assets/N5065_Motor.stl',
+              scale: 1,
+              position: [x,y,z],
+              rotation: [x,y,z]
+            }
+
+          ******************************************************/
+          var assetLoader = function(context, options){
+            var loader = new THREE.STLLoader();
+            loader.addEventListener('load', function(event){
+              var geometry = event.content;
+              var model = new THREE.Mesh(geometry, options.material);
+              
+              if(options.position){
+                model.position.fromArray(options.position);
+              }
+              if(options.rotation){
+                model.rotation.fromArray(options.rotation);
+              }
+              if(options.scale){
+                model.scale.fromArray([options.scale,options.scale,options.scale]);
+              }
+
+              context.add(model);
+            });
+            loader.load(options.pathURL);
+          }
+
           // the render loop
           var render = function () {
             requestAnimationFrame(render);
