@@ -7,9 +7,8 @@
     "url": "https://github.com/ConnectedMachines/MadProps.git"
   },
   "scripts": {
-    "start": "gulp",
-    "test": "gulp test",
-    "serve": "nodemon server.js"
+    "start": "node server.js",
+    "test": "gulp test"
   },
   "license": "MIT",
   "bugs": {
