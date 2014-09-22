@@ -9,10 +9,13 @@
 
     <!-- app scripts -->
     <script src="d3Angular.js"></script>
+    <script src="THREEjsAngular.js"></script>
     <script src="app.js"></script>
+    <script src="d3_visualizer/d3Directives/droneStatus.js"></script>
+    <script src="threejs_visualizer/threeDirectives/droneModel.js"></script>
     <script src="drone_control/controller.js"></script>
     <script src="d3_visualizer/controller.js"></script>
-    <script src="d3_visualizer/d3Directives/droneStatus.js"></script>
+    <script src="threejs_visualizer/controller.js"></script>
 
     <!-- nav-bar -->
     <div id="nav-bar">
@@ -32,7 +35,8 @@
 
       <!-- visualization -->
       <div class="visualizer container" ng-controller="D3VisualizerController">
-        <dronestatus></dronestatus>
+        <!-- <dronestatus></dronestatus> -->
+        <dronemodel></dronemodel>
       </div>
 
       <!-- log -->
