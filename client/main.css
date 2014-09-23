@@ -9,6 +9,22 @@
   background-color: #414B4B;
 }
 
+.material-button-raised {
+  margin: 2em;
+  height: 10%
+}
+/*
+.toolbar {
+  position: fixed;
+}*/
+
+.face {
+  border-radius: 30px;
+  border: 1px solid #ddd;
+  width: 5em;
+  margin: 16px;
+}
+
 /***************************************************
 nav-bar styles
 ***************************************************/
