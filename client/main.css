@@ -39,7 +39,7 @@ generic container styles
 
 .container{
   box-sizing: border-box;
-  border: solid black 2px;
+  /*border: solid black 2px;*/
 }
 
 /***************************************************

@@ -18,7 +18,7 @@ module.exports = function(config) {
     ],
 
     browsers: [
-      'Chrome'
+      'PhantomJS'
     ],
 
     plugins: [
@@ -28,8 +28,8 @@ module.exports = function(config) {
       'karma-spec-reporter'
     ],
 
-    reporters: ['console'],
+    reporters: ['spec'],
 
-    singleRun: false
+    singleRun: true
   });
 };
