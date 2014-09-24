@@ -1,4 +1,4 @@
-angular.module('MadProps', ['ngAnimate', 'ngMaterial', 'ui.router'])
+angular.module('MadProps', ['ngAnimate', 'ngMaterial', 'ui.router', 'THREE'])
 
   .config(function($stateProvider, $urlRouterProvider){
     $urlRouterProvider

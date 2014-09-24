@@ -9,7 +9,7 @@
   </head>
   <body ng-app="MadProps">
     <!-- dependency scripts -->
-<!--     // <script src="../node_modules/d3/d3.min.js"></script> -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/three.js/r68/three.js"></script>
     <script src="../bower_components/angular/angular.js"></script>
     <script src="../bower_components/angular-animate/angular-animate.js"></script>
     <script src="../bower_components/hammerjs/hammer.js"></script>
@@ -22,33 +22,27 @@
     <script src="/client/drone_control/visualizer.js"></script>
     <script src="/client/about.js"></script>
     <script src="/client/drone_control/controller.js"></script>
+    <script src="THREEjsAngular.js"></script>
+    <script src="threejs_visualizer/controller.js"></script>
+    <script src="threejs_visualizer/threeDirectives/droneModel.js"></script>
 
     <!-- nav-bar -->
       
-  <material-toolbar class="toolbar">
-    <div class="material-toolbar-tools">
-      <h2>Connected Machines: Mad Props</h2>
-      <!-- <section class="links" layout="horizontal" layout-align="end"> -->
-        <!-- <material-button class="material-button-fab material-theme-light-blue"> -->
-          <a href="http://connectedmachines.tumblr.com/"><i class="fa fa-tumblr"></i></a>
-        <!-- </material-button> -->
-        <!-- <material-button class="material-button-fab material-theme-light-blue"> -->
-          <a href="https://github.com/ConnectedMachines/MadProps"><i class="fa fa-github"></i></a>
-        <!-- </material-button> -->
-        <!-- <material-button class="material-button-fab material-theme-light-blue"> -->
-          <a href="https://twitter.com/TesselDrone"<i class="fa fa-twitter"></i></a>
-        <!-- </material-button> -->
-      <!-- </section> -->
-    </div>
-    <material-tabs>
-      <!-- <h2 class="title">Connected Machines: Mad Props</h2> -->
-      <material-tab label="HOME" ui-sref="home"></material-tab>
-      <material-tab label="TEAM" ui-sref="team"></material-tab>
-      <material-tab label="ABOUT" ui-sref="about"></material-tab>
-    </material-tabs>
-  </material-toolbar>
-  <nav>
-  <!-- </material-content>   -->
+    <material-toolbar class="toolbar">
+      <div class="material-toolbar-tools">
+        <h2>Connected Machines: Mad Props</h2>
+            <a href="http://connectedmachines.tumblr.com/"><i class="fa fa-tumblr"></i></a>
+            <a href="https://github.com/ConnectedMachines/MadProps"><i class="fa fa-github"></i></a>
+            <a href="https://twitter.com/TesselDrone"<i class="fa fa-twitter"></i></a>
+      </div>
+      <material-tabs>
+        <material-tab label="HOME" ui-sref="home"></material-tab>
+        <material-tab label="TEAM" ui-sref="team"></material-tab>
+        <material-tab label="ABOUT" ui-sref="about"></material-tab>
+      </material-tabs>
+    </material-toolbar>
+    
     <div class="background" ui-view=""></div>
+  
   </body>
 </html>
