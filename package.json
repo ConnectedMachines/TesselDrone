@@ -1,0 +1,41 @@
+{
+  "name": "MadProps",
+  "version": "1.0.0-2",
+  "description": "MadProps",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ConnectedMachines/MadProps.git"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "test": "gulp test"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ConnectedMachines/MadProps/issues"
+  },
+  "homepage": "https://github.com/ConnectedMachines/MadProps",
+  "dependencies": {
+    "cors": "^2.4.2",
+    "express": "^4.9.4",
+    "gulp": "^3.8.8",
+    "gulp-concat": "^2.4.1",
+    "gulp-minify-css": "^0.3.10",
+    "gulp-rename": "^1.2.0",
+    "gulp-stylus": "^1.3.3",
+    "nodejs-websocket": "^1.0.0"
+  },
+  "devDependencies": {
+    "gulp-jshint": "^1.8.4",
+    "gulp-karma": "0.0.4",
+    "jshint-stylish": "^0.4.0",
+    "karma": "^0.12.23",
+    "karma-jasmine": "^0.2.2",
+    "karma-phantomjs-launcher": "^0.1.4",
+    "karma-spec-reporter": "0.0.13"
+  },
+  "subdomain": "madprops.azurewebsites.net",
+  "engines": {
+    "node": "0.10.x"
+  }
+}

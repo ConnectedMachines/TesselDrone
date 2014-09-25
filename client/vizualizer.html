@@ -1,0 +1,27 @@
+<!-- <div id="main-container" ng-app="MadProps"> -->
+
+  <!-- drone control -->
+  <material-content ng-controller="DroneCommandController">
+  <section layout="vertical" layout-sm="horizontal" layout-align="center center">
+    <h2 class="material-flex">{{drone.status}}</h2>
+  </section>
+    <section layout="vertical" layout-sm="horizontal" layout-align="center center">
+      <material-button class="material-button-raised material-button-colored" ng-click="preflight()">Preflight Test</material-button>
+      <material-button class="material-button-raised material-button-colored" ng-click="takeOff()">Take Off!</material-button>
+      <material-button class="material-button-raised material-button-colored" ng-click="land()">Land Drone</material-button>
+    </section>
+  </material-content>
+
+  <!-- visualization -->
+  <section layout="vertical" layout-sm="horizontal" layout-align="center center" ng-controller="THREEvisualizerController">
+    <dronemodel></dronemodel>
+  </section>
+
+
+  <!-- visualization -->
+<!--   <div class="visualizer container" ng-controller="D3VisualizerController">
+
+  </div> -->
+
+  <!-- log -->
+<!-- <div> -->
