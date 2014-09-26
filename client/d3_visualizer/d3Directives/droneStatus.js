@@ -6,7 +6,7 @@ angular.module('MadProps')
       link: function(scope, element, attrs){
         d3Service.d3().then(function(d3){
           // create the svg element inside the container
-          var width = height = 440;
+          var width = height = 480;
 
           scope.propellerData = [
             {
@@ -38,12 +38,12 @@ angular.module('MadProps')
           var armData = [
             {
               pos: [width*(1/2)-10,height*(1/8)],
-              dim: [20,300],
+              dim: [20,height*(3/4)],
               color: 'Black'
             },
             {
               pos: [width*(1/8),height*(1/2)-10],
-              dim: [300,20],
+              dim: [width*(3/4),20],
               color: 'Black'
             }
           ];
@@ -75,38 +75,68 @@ angular.module('MadProps')
             }
           ];
 
-          var outlineArrows = [
+          var outlineArrowsPathData = [
+
+            // clockwise arrows
             {// prop 1
-              points: '',
+              points: ''+(width*(1/2)+30)+','+(height*(1/8)-10)+' '+(width*(1/2)+60)+','+(height*(1/8)-10)+' '+(width*(1/2)+45)+','+(height*(1/8)+10),
               strokeColor: 'Black',
-              strokeWidth: 2,
-              color: 'Black'
+              strokeWidth: 4,
+              color: '#4285f4'
             },
-            {// prop 2
-              points: '',
+            {// prop 1
+              points: ''+(width*(1/2)-30)+','+(height*(1/8)+10)+' '+(width*(1/2)-60)+','+(height*(1/8)+10)+' '+(width*(1/2)-45)+','+(height*(1/8)-10),
               strokeColor: 'Black',
-              strokeWidth: 2,
-              color: 'Black'
+              strokeWidth: 4,
+              color: '#4285f4'
+            },
+
+            {// prop 3
+              points: ''+(width*(1/2)+30)+','+(height*(7/8)-10)+' '+(width*(1/2)+60)+','+(height*(7/8)-10)+' '+(width*(1/2)+45)+','+(height*(7/8)+10),
+              strokeColor: 'Black',
+              strokeWidth: 4,
+              color: '#4285f4'
             },
             {// prop 3
-              points: '',
+              points: ''+(width*(1/2)-30)+','+(height*(7/8)+10)+' '+(width*(1/2)-60)+','+(height*(7/8)+10)+' '+(width*(1/2)-45)+','+(height*(7/8)-10),
               strokeColor: 'Black',
-              strokeWidth: 2,
-              color: 'Black'
+              strokeWidth: 4,
+              color: '#4285f4'
+            },
+
+            // counterclockwise arrows
+            {// prop 2
+              points: ''+(width*(1/8)-10)+','+(height*(1/2)+30)+' '+(width*(1/8)-10)+','+(height*(1/2)+60)+' '+(width*(1/8)+10)+','+(height*(1/2)+45),
+              strokeColor: 'Black',
+              strokeWidth: 4,
+              color: '#4285f4'
+            },
+            {// prop 2
+              points: ''+(width*(1/8)+10)+','+(height*(1/2)-30)+' '+(width*(1/8)+10)+','+(height*(1/2)-60)+' '+(width*(1/8)-10)+','+(height*(1/2)-45),
+              strokeColor: 'Black',
+              strokeWidth: 4,
+              color: '#4285f4'
+            },
+
+            {// prop 4
+              points: ''+(width*(7/8)-10)+','+(height*(1/2)+30)+' '+(width*(7/8)-10)+','+(height*(1/2)+60)+' '+(width*(7/8)+10)+','+(height*(1/2)+45),
+              strokeColor: 'Black',
+              strokeWidth: 4,
+              color: '#4285f4'
             },
             {// prop 4
-              points: '',
+              points: ''+(width*(7/8)+10)+','+(height*(1/2)-30)+' '+(width*(7/8)+10)+','+(height*(1/2)-60)+' '+(width*(7/8)-10)+','+(height*(1/2)-45),
               strokeColor: 'Black',
-              strokeWidth: 2,
-              color: 'Black'
+              strokeWidth: 4,
+              color: '#4285f4'
             },
           ];
 
           var boardPathData = [
             {
-              points: ''+(width*(1/2))+','+(height*(3/8))+' '+(width*(3/8)+20)+','+(height*(3/8)+20)+' '+(width*(3/8)+20)+','+(height*(1/2)+30)+' '+(width*(1/2)+30)+','+(height*(1/2)+30)+' '+(width*(1/2)+30)+','+(height*(3/8)+20),
+              points: ''+(width*(1/2))+','+(height*(3/8))+' '+(width*(1/2)-30)+','+(height*(1/2)-30)+' '+(width*(1/2)-30)+','+(height*(1/2)+30)+' '+(width*(1/2)+30)+','+(height*(1/2)+30)+' '+(width*(1/2)+30)+','+(height*(1/2)-30),
               strokeColor: 'Black',
-              strokeWidth: 2,
+              strokeWidth: 1,
               color: 'Black'
             }
           ];
@@ -167,6 +197,15 @@ angular.module('MadProps')
             }
           }
           scope.renderPropellers();
+
+          var outlineArrows = svg.selectAll('.arrows')
+            .data(outlineArrowsPathData)
+            .enter()
+            .append('polygon')
+            .attr('points', function(d){ return d.points })
+            .attr('stroke', function(d){ return d.strokeColor })
+            .attr('stroke-width', function(d){ return d.strokeWidth })
+            .attr('fill', function(d){ return d.color });
 
           // flag to trigger data manipulation in the controller
           scope.visualizationIsLoaded = true;
