@@ -6,7 +6,7 @@ var orange = '#FF6600';
 var red = '#FF0000';
 
 angular.module('MadProps')
-  .controller('D3VisualizerController', ['$scope', '$window', function($scope, $window){
+  .controller('D3visualizerController', ['$scope', '$window', function($scope, $window){
     var loop = function(){
       if(!$scope.visualizationIsLoaded){
         setTimeout(loop,100);
