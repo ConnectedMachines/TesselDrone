@@ -18,8 +18,8 @@ angular.module('MadProps')
           // create colored background skybox                                 edit this to change color: 0x######
           scene.add( new THREE.Mesh(new THREE.BoxGeometry(200,200,200), new THREE.MeshBasicMaterial({color: 0xffffff, side: THREE.BackSide})) );
           // create ambient skylight
-          scene.add( new THREE.HemisphereLight(0xffffff,0xffffff,0.25));
-          var light = new THREE.PointLight(0xffffff, 0.75, 100);
+          scene.add( new THREE.HemisphereLight(0xffffff,0xffffff,0.45));
+          var light = new THREE.PointLight(0xffffff, 0.75, 200);
           light.position.set(0,100,0);
           scene.add(light);
 
@@ -67,11 +67,11 @@ angular.module('MadProps')
           }
 
           {/************ 3D Workspace upper edge ******************/
-            var matteBlue = new THREE.MeshLambertMaterial({color: 0x0000ff});
-            var matteRed = new THREE.MeshLambertMaterial({color: 0xff0000});
-            var matteGreen = new THREE.MeshLambertMaterial({color: 0x00ff00});
+            var bodyColor = new THREE.MeshLambertMaterial({color: 0xD000E8});
+            var propellerColor = new THREE.MeshLambertMaterial({color: 0x2E3833});
+            var motorColor = new THREE.MeshLambertMaterial({color: 0x8EAD9E});
 
-            scope.drone = new THREE.Object3D();
+            var drone = new THREE.Object3D();
             scope.engine1 = null;
             scope.engine2 = null;
             scope.engine3 = null;
@@ -186,15 +186,16 @@ angular.module('MadProps')
               _wrapper.add(scope.engine4);
 
               _wrapper.rotation.y = THREE.Math.degToRad(-45);
-              scope.drone.add(_wrapper);
+              drone.add(_wrapper);
+              drone.position.setY(-20)
 
-              scene.add(scope.drone);
+              scene.add(drone);
             };
 
             var _wrapper = new THREE.Object3D();
                 // load frame
                 assetLoader(_wrapper, {
-                  material: matteBlue,
+                  material: bodyColor,
                   pathURL: 'assets/diy_mini_quad_v3_one_piece.stl',
                   scale: 0.5,
                   position: [0,0,0],
@@ -211,7 +212,7 @@ angular.module('MadProps')
                 var engineTemplate_L = new THREE.Object3D();
                     // load motor
                     assetLoader(engineTemplate_L, {
-                      material: matteGreen,
+                      material: motorColor,
                       pathURL: 'assets/N5065_Motor.stl',
                       scale: 3,
                       position: [0,0,0],
@@ -227,7 +228,7 @@ angular.module('MadProps')
                     // load left prop
                     assetLoader(engineTemplate_L, {
                       name: 'propeller',
-                      material: matteRed,
+                      material: propellerColor,
                       pathURL: 'assets/prop_left.stl',
                       scale: 0.4,
                       position: [0,13.5,0],
@@ -244,7 +245,7 @@ angular.module('MadProps')
                 var engineTemplate_R = new THREE.Object3D();
                     // load motor
                     assetLoader(engineTemplate_R, {
-                      material: matteGreen,
+                      material: motorColor,
                       pathURL: 'assets/N5065_Motor.stl',
                       scale: 3,
                       position: [0,0,0],
@@ -260,7 +261,7 @@ angular.module('MadProps')
                     // load right prop
                     assetLoader(engineTemplate_R, {
                       name: 'propeller',
-                      material: matteRed,
+                      material: propellerColor,
                       pathURL: 'assets/prop_right.stl',
                       scale: 0.4,
                       position: [0,13.5,0],
@@ -285,10 +286,10 @@ angular.module('MadProps')
             requestAnimationFrame(render);
 
             //set attitude of drone
-            if(scope.drone && scope.attitude){
-              scope.drone.rotation.x = THREE.Math.degToRad(scope.attitude.pitch);
-              scope.drone.rotation.y = THREE.Math.degToRad(scope.attitude.yaw);
-              scope.drone.rotation.z = THREE.Math.degToRad(scope.attitude.roll);
+            if(drone && scope.attitude){
+              drone.rotation.x = THREE.Math.degToRad(scope.attitude.pitch);
+              drone.rotation.y = THREE.Math.degToRad(scope.attitude.yaw);
+              drone.rotation.z = THREE.Math.degToRad(scope.attitude.roll);
             }
 
             // rotate each engine's propeller
