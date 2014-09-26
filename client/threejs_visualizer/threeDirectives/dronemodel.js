@@ -187,7 +187,7 @@ angular.module('MadProps')
 
               _wrapper.rotation.y = THREE.Math.degToRad(-45);
               drone.add(_wrapper);
-              drone.position.setY(-20)
+              drone.position.setY(-20);
 
               scene.add(drone);
             };
