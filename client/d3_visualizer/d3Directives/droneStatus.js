@@ -8,30 +8,30 @@ angular.module('MadProps')
           // create the svg element inside the container
           var width = height = 480;
 
-          scope.propellerData = [
+          var propellerData = [
             {
               id: 0,
               pos: [width*(1/2),height*(1/8)],
               radius: 40,
-              color: 'Grey'
+              color: '#707070'
             },
             {
               id: 1,
               pos: [width*(1/8),height*(1/2)],
               radius: 40,
-              color: 'Grey'
+              color: '#707070'
             },
             {
               id: 2,
               pos: [width*(7/8),height*(1/2)],
               radius: 40,
-              color: 'Grey'
+              color: '#707070'
             },
             {
               id: 3,
               pos: [width*(1/2),height*(7/8)],
               radius: 40,
-              color: 'Grey'
+              color: '#707070'
             }
           ];
 
@@ -175,12 +175,12 @@ angular.module('MadProps')
             .attr('stroke-width', function(d){ return d.strokeWidth })
             .attr('fill', function(d){ return d.color });
 
-          scope.renderPropellers = function(){
+          renderPropellers = function(){
             var propellers = svg.selectAll('.propellers');
 
             if(!propellers[0].length){
               svg.selectAll('.propellers')
-                .data(scope.propellerData)
+                .data(propellerData)
                 .enter()
                 .append('circle')
                 .classed('propellers', true)
@@ -190,13 +190,14 @@ angular.module('MadProps')
                 .style('fill', function(d){ return d.color });
             }else{
               svg.selectAll('.propellers')
-                .data(scope.propellerData)
+                .data(propellerData)
                 .transition()
-                .duration(500)
+                .delay(250)
+                .duration(750)
                 .style('fill', function(d){ return d.color });
             }
           }
-          scope.renderPropellers();
+          renderPropellers();
 
           var outlineArrows = svg.selectAll('.arrows')
             .data(outlineArrowsPathData)
@@ -209,6 +210,22 @@ angular.module('MadProps')
 
           // flag to trigger data manipulation in the controller
           scope.visualizationIsLoaded = true;
+          scope.renderEngine1 = function(hexColor){
+            propellerData[0].color = hexColor;
+            renderPropellers();
+          };
+          scope.renderEngine2 = function(hexColor){
+            propellerData[1].color = hexColor;
+            renderPropellers();
+          };
+          scope.renderEngine3 = function(hexColor){
+            propellerData[2].color = hexColor;
+            renderPropellers();
+          };
+          scope.renderEngine4 = function(hexColor){
+            propellerData[3].color = hexColor;
+            renderPropellers();
+          };
         });
       }
     }
