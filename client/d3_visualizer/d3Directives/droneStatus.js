@@ -6,29 +6,30 @@ angular.module('MadProps')
       link: function(scope, element, attrs){
         d3Service.d3().then(function(d3){
           // create the svg element inside the container
+          var width = height = 440;
 
           scope.propellerData = [
             {
               id: 0,
-              pos: [200,50],
+              pos: [width*(1/2),height*(1/8)],
               radius: 40,
               color: 'Grey'
             },
             {
               id: 1,
-              pos: [50,200],
+              pos: [width*(1/8),height*(1/2)],
               radius: 40,
               color: 'Grey'
             },
             {
               id: 2,
-              pos: [350,200],
+              pos: [width*(7/8),height*(1/2)],
               radius: 40,
               color: 'Grey'
             },
             {
               id: 3,
-              pos: [200,350],
+              pos: [width*(1/2),height*(7/8)],
               radius: 40,
               color: 'Grey'
             }
@@ -36,12 +37,12 @@ angular.module('MadProps')
 
           var armData = [
             {
-              pos: [190,50],
+              pos: [width*(1/2)-10,height*(1/8)],
               dim: [20,300],
               color: 'Black'
             },
             {
-              pos: [50,190],
+              pos: [width*(1/8),height*(1/2)-10],
               dim: [300,20],
               color: 'Black'
             }
@@ -50,25 +51,25 @@ angular.module('MadProps')
           var propOutlineData = [
             {
               id: 0,
-              pos: [200,50],
+              pos: [width*(1/2),height*(1/8)],
               radius: 50,
               color: 'Black'
             },
             {
               id: 1,
-              pos: [50,200],
+              pos: [width*(1/8),height*(1/2)],
               radius: 50,
               color: 'Black'
             },
             {
               id: 2,
-              pos: [350,200],
+              pos: [width*(7/8),height*(1/2)],
               radius: 50,
               color: 'Black'
             },
             {
               id: 3,
-              pos: [200,350],
+              pos: [width*(1/2),height*(7/8)],
               radius: 50,
               color: 'Black'
             }
@@ -103,7 +104,7 @@ angular.module('MadProps')
 
           var boardPathData = [
             {
-              points: '200,150 170,170 170,230 230,230 230,170',
+              points: ''+(width*(1/2))+','+(height*(3/8))+' '+(width*(3/8)+20)+','+(height*(3/8)+20)+' '+(width*(3/8)+20)+','+(height*(1/2)+30)+' '+(width*(1/2)+30)+','+(height*(1/2)+30)+' '+(width*(1/2)+30)+','+(height*(3/8)+20),
               strokeColor: 'Black',
               strokeWidth: 2,
               color: 'Black'
@@ -112,8 +113,8 @@ angular.module('MadProps')
 
           var svg = d3.select(element[0])
             .append('svg')
-            .style('width', '400px')
-            .style('height', '400px');
+            .style('width', ''+width+'px')
+            .style('height', ''+height+'px');
 
           var arms = svg.selectAll('rect')
             .data(armData)
