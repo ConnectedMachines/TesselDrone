@@ -192,8 +192,6 @@ angular.module('MadProps')
               svg.selectAll('.propellers')
                 .data(propellerData)
                 .transition()
-                .delay(250)
-                .duration(750)
                 .style('fill', function(d){ return d.color });
             }
           }
@@ -209,7 +207,7 @@ angular.module('MadProps')
             .attr('fill', function(d){ return d.color });
 
           // flag to trigger data manipulation in the controller
-          scope.visualizationIsLoaded = true;
+          scope.d3VisualizerIsLoaded = true;
           scope.renderEngine1 = function(hexColor){
             propellerData[0].color = hexColor;
             renderPropellers();

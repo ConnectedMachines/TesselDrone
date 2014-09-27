@@ -190,6 +190,7 @@ angular.module('MadProps')
               drone.position.setY(-20);
 
               scene.add(drone);
+              scope.threeVisualizerIsLoaded = true;
             };
 
             var _wrapper = new THREE.Object3D();
