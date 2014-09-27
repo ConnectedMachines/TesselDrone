@@ -287,10 +287,11 @@ angular.module('MadProps')
             requestAnimationFrame(render);
 
             //set attitude of drone
-            if(drone && scope.attitude){
-              drone.rotation.x = THREE.Math.degToRad(scope.attitude.pitch);
-              drone.rotation.y = THREE.Math.degToRad(scope.attitude.yaw);
-              drone.rotation.z = THREE.Math.degToRad(scope.attitude.roll);
+            if(drone){ //&& scope.attitude){
+              // console.log('!!!!!')
+              drone.rotation.x += 0.01 //THREE.Math.degToRad(scope.attitude.pitch);
+              drone.rotation.y += 0.001 //THREE.Math.degToRad(scope.attitude.yaw);
+              drone.rotation.z -= 0.005 //THREE.Math.degToRad(scope.attitude.roll);
             }
 
             // rotate each engine's propeller
