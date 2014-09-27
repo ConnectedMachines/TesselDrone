@@ -1,5 +1,6 @@
 angular.module('MadProps')
   .controller('D3visualizerController', ['$scope', '$window', function($scope, $window){
+    // loop async until directive has finished executing
     var loop = function recurse(){
       if($scope.d3VisualizerIsLoaded){
         $scope.$emit('d3Loaded');
@@ -65,6 +66,7 @@ angular.module('MadProps')
       }
     }
 
+    //update color of propellers when new data is available
     $scope.$on('throttleData', function(){
       var data = arguments[1];
       console.log(data)

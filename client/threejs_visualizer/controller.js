@@ -1,5 +1,6 @@
 angular.module('MadProps')
   .controller('THREEvisualizerController', ['$scope', function($scope){
+    // loop async until directive has finished executing
     var loop = function recurse(){
       if($scope.threeVisualizerIsLoaded){
         $scope.$emit('threeLoaded');
@@ -9,6 +10,7 @@ angular.module('MadProps')
     }
     loop();
 
+    // update throttle of engines when new data is available
     $scope.$on('throttleData', function(){
       var data = arguments[1];
       $scope.engine1.throttle = data.e1*10;

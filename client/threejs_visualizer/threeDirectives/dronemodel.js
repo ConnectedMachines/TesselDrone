@@ -161,7 +161,7 @@ angular.module('MadProps')
               };
             }
 
-            // tobe run once all assets loaded
+            // to be run once all assets loaded
             var loadComplete = function(){
               console.log('success!!!');
 

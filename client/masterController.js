@@ -10,9 +10,9 @@ angular.module('MadProps')
       threeVisualizerLoaded = true;
     });
 
+    // loops async until both d3 vis and THREEjs vis is loaded
     var loop = function recurse(){
       if(d3VisualizerLoaded && threeVisualizerLoaded){
-        console.log('loaded!!!!')
         var throttleData = new LinkedList();
         throttleData.addToTail({e1: 0, e2: 0, e3: 0, e4: 0});
         throttleData.addToTail({e1: 0.1, e2: 0.1, e3: 0.1, e4: 0.1});
