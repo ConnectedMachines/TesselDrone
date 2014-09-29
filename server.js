@@ -13,10 +13,10 @@ var tesselData = {
     yaw: 0
   },
   motorThrottles: {
-    1: 0,
-    2: 0,
-    3: 0,
-    4: 0
+    e1: 0,
+    e2: 0,
+    e3: 0,
+    e4: 0
   }
 };
 

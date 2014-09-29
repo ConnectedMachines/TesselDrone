@@ -15,11 +15,8 @@ angular.module('MadProps')
       var data = arguments[1];
       $scope.attitude = data;
     });
-    // $scope.$on('throttleData', function(){
-    //   var data = arguments[1];
-    //   $scope.engine1.throttle = data.e1*10;
-    //   $scope.engine2.throttle = data.e2*10;
-    //   $scope.engine3.throttle = data.e3*10;
-    //   $scope.engine4.throttle = data.e4*10;
-    // })
+    $scope.$on('throttleData', function(){
+      var data = arguments[1];
+      $scope.throttle = data;
+    })
   }]);
