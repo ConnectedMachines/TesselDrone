@@ -161,10 +161,90 @@ angular.module('MadProps')
               };
             }
 
+            var _wrapper = new THREE.Object3D();
+              // load frame
+              assetLoader(_wrapper, {
+                material: bodyColor,
+                pathURL: 'assets/diy_mini_quad_v3_one_piece.stl',
+                scale: 0.5,
+                position: [0,0,0],
+                rotation: [
+                  THREE.Math.degToRad(90),// x
+                  THREE.Math.degToRad(0), // y
+                  THREE.Math.degToRad(0)  // z
+                ]
+              }, function(){
+                loadProgress.frame = true;
+              });
+
+              // create template engine with left prop
+              var engineTemplate_L = new THREE.Object3D();
+                // load motor
+                assetLoader(engineTemplate_L, {
+                  material: motorColor,
+                  pathURL: 'assets/N5065_Motor.stl',
+                  scale: 3,
+                  position: [0,0,0],
+                  rotation: [
+                    THREE.Math.degToRad(90),// x
+                    THREE.Math.degToRad(0), // y
+                    THREE.Math.degToRad(0)  // z
+                  ]
+                }, function(){
+                  loadProgress.engineTemplateL_motor = true;
+                });
+
+                // load left prop
+                assetLoader(engineTemplate_L, {
+                  name: 'propeller',
+                  material: propellerColor,
+                  pathURL: 'assets/prop_left.stl',
+                  scale: 0.4,
+                  position: [0,13.5,0],
+                  rotation: [
+                    THREE.Math.degToRad(90),// x
+                    THREE.Math.degToRad(0), // y
+                    THREE.Math.degToRad(0)  // z
+                  ]
+                }, function(){
+                  loadProgress.engineTemplateL_prop = true;
+                });
+
+              // create template engine with right prop
+              var engineTemplate_R = new THREE.Object3D();
+                // load motor
+                assetLoader(engineTemplate_R, {
+                  material: motorColor,
+                  pathURL: 'assets/N5065_Motor.stl',
+                  scale: 3,
+                  position: [0,0,0],
+                  rotation: [
+                    THREE.Math.degToRad(90),// x
+                    THREE.Math.degToRad(0), // y
+                    THREE.Math.degToRad(0)  // z
+                  ]
+                }, function(){
+                  loadProgress.engineTemplateR_motor = true;
+                });
+
+                // load right prop
+                assetLoader(engineTemplate_R, {
+                  name: 'propeller',
+                  material: propellerColor,
+                  pathURL: 'assets/prop_right.stl',
+                  scale: 0.4,
+                  position: [0,13.5,0],
+                  rotation: [
+                    THREE.Math.degToRad(90),// x
+                    THREE.Math.degToRad(0), // y
+                    THREE.Math.degToRad(0)  // z
+                  ]
+                }, function(){
+                  loadProgress.engineTemplateR_prop = true;
+                });
+          
             // to be run once all assets loaded
             var loadComplete = function(){
-              console.log('success!!!');
-
               scope.engine1 = engineTemplate_L.clone();
               scope.engine1.position.set(-40,5,-40);
               scope.engine1.throttle = 0;
@@ -192,89 +272,6 @@ angular.module('MadProps')
               scene.add(drone);
               scope.threeVisualizerIsLoaded = true;
             };
-
-            var _wrapper = new THREE.Object3D();
-                // load frame
-                assetLoader(_wrapper, {
-                  material: bodyColor,
-                  pathURL: 'assets/diy_mini_quad_v3_one_piece.stl',
-                  scale: 0.5,
-                  position: [0,0,0],
-                  rotation: [
-                    THREE.Math.degToRad(90),// x
-                    THREE.Math.degToRad(0), // y
-                    THREE.Math.degToRad(0)  // z
-                  ]
-                }, function(){
-                  loadProgress.frame = true;
-                });
-
-                // create template engine with left prop
-                var engineTemplate_L = new THREE.Object3D();
-                    // load motor
-                    assetLoader(engineTemplate_L, {
-                      material: motorColor,
-                      pathURL: 'assets/N5065_Motor.stl',
-                      scale: 3,
-                      position: [0,0,0],
-                      rotation: [
-                        THREE.Math.degToRad(90),// x
-                        THREE.Math.degToRad(0), // y
-                        THREE.Math.degToRad(0)  // z
-                      ]
-                    }, function(){
-                      loadProgress.engineTemplateL_motor = true;
-                    });
-
-                    // load left prop
-                    assetLoader(engineTemplate_L, {
-                      name: 'propeller',
-                      material: propellerColor,
-                      pathURL: 'assets/prop_left.stl',
-                      scale: 0.4,
-                      position: [0,13.5,0],
-                      rotation: [
-                        THREE.Math.degToRad(90),// x
-                        THREE.Math.degToRad(0), // y
-                        THREE.Math.degToRad(0)  // z
-                      ]
-                    }, function(){
-                      loadProgress.engineTemplateL_prop = true;
-                    });
-
-                // create template engine with right prop
-                var engineTemplate_R = new THREE.Object3D();
-                    // load motor
-                    assetLoader(engineTemplate_R, {
-                      material: motorColor,
-                      pathURL: 'assets/N5065_Motor.stl',
-                      scale: 3,
-                      position: [0,0,0],
-                      rotation: [
-                        THREE.Math.degToRad(90),// x
-                        THREE.Math.degToRad(0), // y
-                        THREE.Math.degToRad(0)  // z
-                      ]
-                    }, function(){
-                      loadProgress.engineTemplateR_motor = true;
-                    });
-
-                    // load right prop
-                    assetLoader(engineTemplate_R, {
-                      name: 'propeller',
-                      material: propellerColor,
-                      pathURL: 'assets/prop_right.stl',
-                      scale: 0.4,
-                      position: [0,13.5,0],
-                      rotation: [
-                        THREE.Math.degToRad(90),// x
-                        THREE.Math.degToRad(0), // y
-                        THREE.Math.degToRad(0)  // z
-                      ]
-                    }, function(){
-                      loadProgress.engineTemplateR_prop = true;
-                    });
-            
           }/************ 3D Workspace lower edge ******************/
 
           var prop1 = null;
@@ -287,11 +284,11 @@ angular.module('MadProps')
             requestAnimationFrame(render);
 
             //set attitude of drone
-            if(drone){ //&& scope.attitude){
+            if(drone && scope.attitude){
               // console.log('!!!!!')
-              drone.rotation.x += 0.01 //THREE.Math.degToRad(scope.attitude.pitch);
-              drone.rotation.y += 0.001 //THREE.Math.degToRad(scope.attitude.yaw);
-              drone.rotation.z -= 0.005 //THREE.Math.degToRad(scope.attitude.roll);
+              drone.rotation.x = scope.attitude.pitch//THREE.Math.degToRad(scope.attitude.pitch);
+              drone.rotation.y = scope.attitude.yaw//THREE.Math.degToRad(scope.attitude.yaw);
+              drone.rotation.z = scope.attitude.roll//THREE.Math.degToRad(scope.attitude.roll);
             }
 
             // rotate each engine's propeller

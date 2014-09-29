@@ -11,11 +11,15 @@ angular.module('MadProps')
     loop();
 
     // update throttle of engines when new data is available
-    $scope.$on('throttleData', function(){
+    $scope.$on('attitudeData', function(){
       var data = arguments[1];
-      $scope.engine1.throttle = data.e1*10;
-      $scope.engine2.throttle = data.e2*10;
-      $scope.engine3.throttle = data.e3*10;
-      $scope.engine4.throttle = data.e4*10;
-    })
+      $scope.attitude = data;
+    });
+    // $scope.$on('throttleData', function(){
+    //   var data = arguments[1];
+    //   $scope.engine1.throttle = data.e1*10;
+    //   $scope.engine2.throttle = data.e2*10;
+    //   $scope.engine3.throttle = data.e3*10;
+    //   $scope.engine4.throttle = data.e4*10;
+    // })
   }]);
