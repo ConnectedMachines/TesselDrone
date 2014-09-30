@@ -5,7 +5,12 @@ module.exports = function(config) {
     frameworks: ['jasmine'],
 
     files: [
-      '**.spec.js'
+      'node_modules/jquery/dist/jquery.js',
+      'node_modules/angular/lib/angular.js',
+      'node_modules/angular-mocks/angular-mocks.js',
+      'client/d3Angular.js',
+      'client/app.js',
+      '**/**.spec.js'
     ],
 
     exclude: [
@@ -17,11 +22,14 @@ module.exports = function(config) {
     ],
 
     plugins: [
+      'karma-chrome-launcher',
       'karma-phantomjs-launcher',
       'karma-jasmine',
       'karma-spec-reporter'
     ],
 
-    reporters: ['spec']
+    reporters: ['spec'],
+
+    singleRun: true
   });
 };

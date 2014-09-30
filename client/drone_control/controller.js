@@ -1,7 +1,5 @@
 angular.module('MadProps')
-  
   .controller('DroneCommandController', function($scope, Requests){
-
     $scope.drone = {};
     $scope.drone.status = "idle";
 
