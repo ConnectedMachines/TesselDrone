@@ -1,38 +1,29 @@
 // ###############################
 // REQUIRES
 // ###############################
-var express = require('express');
-var Pusher = require('pusher');
 var cors = require('cors');
 var bodyParser = require('body-parser');
 var ws = require('nodejs-websocket');
+var app = require('express')();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
 
 // ###############################
 // GLOBAL VARIABLES
 // ###############################
-var app = express();
 var tesselConnected = false;
 var tesselPreflightComplete = false;
 var port = process.env.PORT || 3000;
-var tesselport = 8000;
 var tesselIP = '10.8.31.216';
 
 // ###############################
 // EXPRESS CONFIGURATION
 // ###############################
 
+
 app.use(cors());
 app.use(express.static(__dirname));
 app.use(bodyParser.json());
-
-// ###############################
-// PUSHER SETUP - TO CLIENT
-// ###############################
-var pusher = new Pusher({
-  appId: '12345',
-  key: '1234567890',
-  secret: 'my secret... shhh!!!'
-});
 
 // ###############################
 // WEBSOCKETS SETUP - TO TESSEL
@@ -42,36 +33,48 @@ var connection = ws.connect('ws://' + tesselIP + ':' + port, function () {
   console.log('Connected to Tessel');
 });
 
-// When we get info back from the tessel websocket we want to let the client know
-connection.on('text', function (data) {
-  // Tell Pusher to trigger an 'updated' event on the 'Drone' channel
-  // and pass the JSON data from the tessel to the event
-  pusher.trigger('droneData', 'updated', data);
-});
+var tesselToClientBridge(socket){
+  // When we get info back from the tessel websocket we want to let the client know
+  connection.on('text', function (data) {
+    data = JSON.parse(data);
+    socket.volatile.emit('droneData', { attitude: {
+                                          pitch: data.xAxis,
+                                          roll: data.yAxis,
+                                          yaw: data.zAxis
+                                        },
+                                        motorThrottles: {
+                                          motor1: data.motor1,
+                                          motor2: data.motor2,
+                                          motor3: data.motor3,
+                                          motor4: data.motor4
+                                        }
+                                      });
+  });
+};
 
 // ###############################
 // HELPER FUNCTIONS
 // ###############################
-var tesselPreflight = function (res) {
+var tesselPreflight = function (callback) {
   if (tesselPreflightComplete) {
-    res.send('Recieved!');
+    callback();
   } else if (tesselConnected) {
     tesselPreflightComplete = true;
     connection.sendText('preflight');
-    res.send('Recieved!');
+    callback();
   } else {
-    tesselPreflight(res);
+    tesselPreflight(callback);
   }
 };
 
-var tesselTakeoff = function (res) {
+var tesselTakeoff = function (callback) {
   connection.sendText('takeoff');
-  res.send('Taking Off!');
+  callback();
 };
 
-var tesselLand = function (res) {
+var tesselLand = function (callback) {
   connection.sendText('land');
-  res.send('Landing!');
+  callback();
 };
 
 // ###############################
@@ -81,20 +84,28 @@ app.get('/', function (req, res) {
   res.redirect('/client');
 });
 
-app.get('/api/preflight', function (req, res) {
-  tesselPreflight(res);
+io.on('connection', function (socket) {
+  socket.emit('status', { status: 'Successfuly Connected' });
+  socket.on('land', function (data) {
+    tesselLand(function(){
+      socket.emit('status', { status: 'Landing Command Recieved' });
+    });
+  });
+  socket.on('preflight', function (data) {
+    tesselPreflight(function(){
+      socket.emit('status', { status: 'Preflight Command Recieved' });
+    });
+  });
+  socket.on('takeoff', function (data) {
+    tesselTakeoff(function(){
+      socket.emit('status', { status: 'Takeoff Command Recieved' });
+    });
+  });
+  tesselToClientBridge(socket);
 });
-
-app.get('/api/land', function (req, res) {
-  tesselLand(res);
-});
-app.get('/api/takeoff', function (req, res) {
-  tesselTakeoff(res);
-});
-
 
 // ###############################
 // START LISTEINING
 // ###############################
 console.log('listening on port', port);
-app.listen(port);
+server.listen(port);
