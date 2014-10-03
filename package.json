@@ -27,6 +27,7 @@
     "coveralls": "^2.11.2",
     "gulp-jshint": "^1.8.4",
     "gulp-karma": "0.0.4",
+    "gulp-shell": "^0.2.9",
     "jshint-stylish": "^0.4.0",
     "karma": "^0.12.23",
     "karma-coverage": "^0.2.6",
