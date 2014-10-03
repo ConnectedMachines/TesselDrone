@@ -8,7 +8,6 @@ var stylus = require('gulp-stylus');
 var concat = require('gulp-concat');
 var minifyCSS = require('gulp-minify-css');
 var rename = require('gulp-rename');
-var coveralls = require('gulp-coveralls');
 
 gulp.task('default', ['lint', 'test', 'css']);
 
@@ -26,11 +25,12 @@ gulp.task('karma', function (done) {
     configFile: __dirname + '/karma.conf.js',
     // Make Karma exit after tests finish.
   }, done);
+
 });
-gulp.task('coveralls', function(){
+gulp.task('coveralls', ['karma'], function(){ // 2nd arg is a dependency: 'karma' must be finished first.
   // Send results of istanbul's test coverage to coveralls.io.
-  gulp.src('test/coverage/**/lcov.info')
-    .pipe(coveralls());
+  return gulp.src('gulpfile.js', {read: false}) // You have to give it a file, but you don't have to read it.
+    .pipe(shell('cat coverage/lcov.info | node_modules/coveralls/bin/coveralls.js'));
 });
 
 // CSS from Stylus.js (minified & concated too!).

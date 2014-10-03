@@ -10,15 +10,14 @@
   - Karma
   - Jasmine
   - JSHint
-  - Coveralls
+  - Coveralls.io
 - Deployment:
   - Gulp
   - Travis-CI
   - GitHub
   - Azure
 - Hardware
-  - Tessel (Node.js, Colony, Lua)
-  - IMU (accelerometer & gyroscope)
+  - Tessel (Node.js)
+  - accelerometer
   - servo controller
-  - ultrasonic rangefinder
   - ESC (SimonK firmware)
