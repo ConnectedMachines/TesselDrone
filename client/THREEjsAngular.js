@@ -10,7 +10,7 @@ angular.module('THREE', [])
     var scriptTag = $document[0].createElement('script');
     scriptTag.type = 'text/javascript';
     scriptTag.async = true;
-    scriptTag.src = '../node_modules/n3d-threejs/index.js';
+    scriptTag.src = "./threejs_added.js";
     scriptTag.onreadystatechange = function(){
       if(this.readyState === 'complete'){
         onScriptLoad();
@@ -19,7 +19,7 @@ angular.module('THREE', [])
     scriptTag.onload = onScriptLoad;
 
     $document[0].getElementsByTagName('body')[0]
-      .appendChild(scriptTag);
+      .appendChild(scriptTag);    
 
     return {
       THREE: function(){

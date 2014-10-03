@@ -1,56 +1,51 @@
 <html>
   <head>
     <title>Mad Props</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <!-- <base href="/"> -->
     <link rel="stylesheet" type="text/css" href="main.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../bower_components/angular-material/angular-material.css">
   </head>
-  <body>
+  <body ng-app="MadProps">
     <!-- dependency scripts -->
-    <script src="../node_modules/angular/lib/angular.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/three.js/r68/three.js"></script>
+    <script src="../bower_components/angular/angular.js"></script>
+    <script src="../bower_components/angular-animate/angular-animate.js"></script>
+    <script src="../bower_components/hammerjs/hammer.js"></script>
+    <script src="../bower_components/angular-material/angular-material.js"></script>
+    <script src="../bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 
     <!-- app scripts -->
-    <script src="d3Angular.js"></script>
+    <script src="/client/app.js"></script>
+    <script src="/client/team.js"></script>
+    <script src="/client/drone_control/visualizer.js"></script>
+    <script src="/client/about.js"></script>
+    <script src="/client/drone_control/controller.js"></script>
+    <script src="masterController.js"></script>
     <script src="THREEjsAngular.js"></script>
-    <script src="app.js"></script>
-    <script src="d3_visualizer/d3Directives/droneStatus.js"></script>
-    <script src="threejs_visualizer/threeDirectives/droneModel.js"></script>
-    <script src="drone_control/controller.js"></script>
-    <script src="d3_visualizer/controller.js"></script>
     <script src="threejs_visualizer/controller.js"></script>
+    <script src="threejs_visualizer/threeDirectives/droneModel.js"></script>
+    <script src="d3Angular.js"></script>
+    <script src="d3_visualizer/controller.js"></script>
+    <script src="d3_visualizer/d3Directives/droneStatus.js"></script>
 
     <!-- nav-bar -->
-    <div id="nav-bar">
-      <h2>Mad Props</h2>
-      <div id="logout-button">logout</div>
-    </div>
-    <div id="main-container" ng-app="MadProps">
-
-      <!-- drone control -->
-      <div class="drone-control container" ng-controller="DroneCommandController">
-        <div class="control-panel">
-          <button class="control-button"ng-click="preflightTest()">Preflight Test</button>
-          <button class="control-button"ng-click="takeoff()">Take Off!</button>
-          <button class="control-button"ng-click="land()">Land Drone</button>
-        </div>
+      
+    <material-toolbar class="toolbar">
+      <div class="material-toolbar-tools">
+        <h2>Connected Machines: Mad Props</h2>
+            <a href="http://connectedmachines.tumblr.com/"><i class="fa fa-tumblr"></i></a>
+            <a href="https://github.com/ConnectedMachines/MadProps"><i class="fa fa-github"></i></a>
+            <a href="https://twitter.com/TesselDrone"<i class="fa fa-twitter"></i></a>
       </div>
-
-      <!-- visualization -->
-      <div class="visualizer container" ng-controller="THREEvisualizerController">
-        <!-- <dronestatus></dronestatus> -->
-        <dronemodel></dronemodel>
-      </div>
-
-      <!-- log -->
-      <div class="drone-log container">
-        <div class="log-output">
-          drone inactive...
-        </div>
-        <div class="log-input">
-          <form>
-            <input></input>
-            <button>submit</button>
-          </form>
-        </div>
-      </div>
-    <div>
+      <material-tabs>
+        <material-tab label="HOME" ui-sref="home"></material-tab>
+        <material-tab label="TEAM" ui-sref="team"></material-tab>
+        <material-tab label="ABOUT" ui-sref="about"></material-tab>
+      </material-tabs>
+    </material-toolbar>
+    
+    <div class="background" ui-view=""></div>
   </body>
 </html>
