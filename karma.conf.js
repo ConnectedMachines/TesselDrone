@@ -3,25 +3,27 @@
 module.exports = function(config) {
   config.set({
     frameworks: ['jasmine'],
-
+    singleRun: true,
     files: [
-      '**.spec.js'
+      'app.js',
+      '*.spec.js',
+      './tessel/*.spec.js',
     ],
-
-    exclude: [
-      'node_modules'
-    ],
-
     browsers: [
       'PhantomJS'
     ],
-
     plugins: [
       'karma-phantomjs-launcher',
       'karma-jasmine',
-      'karma-spec-reporter'
+      'karma-spec-reporter',
+      'karma-coverage'
     ],
-
-    reporters: ['spec']
+    reporters: ['spec', 'coverage'],
+    preprocessors: { '!(*spec).js': 'coverage' },
+    coverageReporter: {
+      type: 'lcov',
+      dir: 'coverage',
+      subdir: '.' // Output the results into ./coverage/
+    }
   });
 };

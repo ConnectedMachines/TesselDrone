@@ -1,6 +1,6 @@
 var tessel = require('tessel');
 var servolib = require('servo-pca9685'); // Or 'servo-pca9685' in your own code
-var servo = servolib.use(tessel.port['B']);
+var servo = servolib.use(tessel.port['C']);
 
 var startupTime = 700 // 500 < minStartupTime? < 1000 in ms
 var maxPWM = 0.125; // 

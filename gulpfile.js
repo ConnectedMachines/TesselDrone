@@ -8,6 +8,7 @@ var stylus = require('gulp-stylus');
 var concat = require('gulp-concat');
 var minifyCSS = require('gulp-minify-css');
 var rename = require('gulp-rename');
+var coveralls = require('gulp-coveralls');
 
 gulp.task('default', ['lint', 'test', 'css']);
 
@@ -18,13 +19,18 @@ gulp.task('lint', function(){
     .pipe(jshint.reporter('jshint-stylish'));
 });
 
-gulp.task('test', function (done) {
+gulp.task('test', ['karma', 'coveralls']);
+gulp.task('karma', function (done) {
   karma.start({
     // Import Karma with settings from karma.conf.js.
     configFile: __dirname + '/karma.conf.js',
     // Make Karma exit after tests finish.
-    singleRun: true
   }, done);
+});
+gulp.task('coveralls', function(){
+  // Send results of istanbul's test coverage to coveralls.io.
+  gulp.src('test/coverage/**/lcov.info')
+    .pipe(coveralls());
 });
 
 // CSS from Stylus.js (minified & concated too!).
@@ -40,7 +46,7 @@ gulp.task('css', function(){
 // Runs Tessel code.
 gulp.task('tessel', function(){
   return gulp.src([
-      'tessel/motorTest.js'])
+      'tessel/irisMotorTest.js'])
     .pipe(shell([
       'tessel run <%= file.path %>'
       ], {cwd:'tessel'}));

@@ -9,4 +9,9 @@ describe('MadProps', function(){
     pending();
   });
   xit('is also pending', function(){});
+
+  it('equals 3', function(){
+    expect(testableFunction()).toBe(3);
+  });
+
 });
