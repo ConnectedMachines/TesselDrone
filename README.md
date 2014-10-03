@@ -4,7 +4,10 @@ MadProps
 
 [![Coverage Status](https://img.shields.io/coveralls/ConnectedMachines/MadProps.svg)](https://coveralls.io/r/ConnectedMachines/MadProps)
 
-mLuby coverage: [![Coverage Status](https://img.shields.io/coveralls/mLuby/MadProps.svg)](https://coveralls.io/r/mLuby/MadProps)
+mLuby coverage:
+[![Build Status](https://secure.travis-ci.org/ConnectedMachines/MadProps.png)](http://travis-ci.org/ConnectedMachines/MadProps)
+
+[![Coverage Status](https://img.shields.io/coveralls/mLuby/MadProps.svg)](https://coveralls.io/r/mLuby/MadProps)
 
 [Getting Started](docs/GETTING-STARTED.md)
 
