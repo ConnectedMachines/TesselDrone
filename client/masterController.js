@@ -1,6 +1,6 @@
 var testFoo;
-angular.module('MadProps')
-  .controller('MasterController', ['$scope', '$http', function($scope, $http){
+angular.module('MadProps',['btford.socket-io'])
+  .controller('MasterController', ['$scope', '$http', function($scope, $http, socket){
     var d3VisualizerLoaded = false;
     var threeVisualizerLoaded = false;
 
@@ -15,17 +15,15 @@ angular.module('MadProps')
 
     var onVisualizersLoaded = function(){
       if(d3VisualizerLoaded && threeVisualizerLoaded){
-        setInterval(function(){
-          $http({method: 'GET', url: '/data'})
-            .success(function(data, status, headers, config){
-              // console.log('onVis:',data);
-              $scope.$broadcast('attitudeData', data.attitude);
-              $scope.$broadcast('throttleData', data.motorThrottles);
-            })
-            .error(function(data, status, headers, config){
-              console.log('GET VISUALIZER DATA ERROR:', data);
-            });
-        },100);
+        $scope.$on('socket:droneData', function (ev, data) {
+          $scope.$broadcast('attitudeData', data.attitude);
+          $scope.$broadcast('throttleData', data.motorThrottles);
+        });
       }
-    }
-  }]);
+    };
+  }])
+  .factory('socket', function (socketFactory) {
+    var mySocket = socketFactory();
+      mySocket.forward('droneData');
+      return mySocket;
+  });

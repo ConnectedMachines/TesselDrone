@@ -1,7 +1,10 @@
-angular.module('MadProps')
-  .controller('DroneCommandController', function($scope, Requests){
+angular.module('MadProps', [''])
+  .controller('DroneCommandController', function($scope, Requests,){
     $scope.drone = {};
     $scope.drone.status = "idle";
+    //Possible Socket.io
+    //Angular socket io
+
 
     $scope.preflight = function(){
       $scope.drone.status = "Checking motors";
