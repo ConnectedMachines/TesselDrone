@@ -1,3 +1,5 @@
+![tech stack](https://cloud.githubusercontent.com/assets/2483420/4520046/16fe425c-4cd8-11e4-8134-cf09bc23ba82.png)
+
 - Client:
   - Angular
   - D3
