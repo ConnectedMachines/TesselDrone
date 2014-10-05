@@ -22,7 +22,7 @@ gulp.task('test', ['karma', 'coveralls']);
 gulp.task('karma', function (done) {
   karma.start({
     // Import Karma with settings from karma.conf.js.
-    configFile: __dirname + '/karma.conf.js',
+    configFile: __dirname + '/karma.conf.js'
     // Make Karma exit after tests finish.
   }, done);
 

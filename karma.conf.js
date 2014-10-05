@@ -5,14 +5,20 @@ module.exports = function(config) {
     frameworks: ['jasmine'],
     singleRun: true,
     files: [
-      'app.js',
-      '*.spec.js',
-      './tessel/*.spec.js',
+      'bower_components/angular/angular.js',
+      'client/d3Angular.js',
+      'client/app.js',
+      '**/**.spec.js'
+    ],
+
+    exclude: [
+      'node_modules'
     ],
     browsers: [
       'PhantomJS'
     ],
     plugins: [
+      'karma-chrome-launcher',
       'karma-phantomjs-launcher',
       'karma-jasmine',
       'karma-spec-reporter',

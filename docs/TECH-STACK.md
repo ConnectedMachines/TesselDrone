@@ -10,10 +10,11 @@
   - Karma
   - Jasmine
   - JSHint
-  - Coveralls.io
+  - Istanbul
 - Deployment:
   - Gulp
   - Travis-CI
+  - Coveralls.io
   - GitHub
   - Azure
 - Hardware
