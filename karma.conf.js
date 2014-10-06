@@ -6,13 +6,16 @@ module.exports = function(config) {
     singleRun: true,
     files: [
       'bower_components/angular/angular.js',
+      'bower_components/angular-mocks/angular-mocks.js',
       'client/d3Angular.js',
       'client/app.js',
-      '**/**.spec.js'
+      'client/*.js',
+      'client/*.spec.js'
     ],
 
     exclude: [
-      'node_modules'
+      'node_modules',
+      'client/threejs_added.js'
     ],
     browsers: [
       'PhantomJS'
@@ -25,7 +28,7 @@ module.exports = function(config) {
       'karma-coverage'
     ],
     reporters: ['spec', 'coverage'],
-    preprocessors: { '!(*spec).js': 'coverage' },
+    preprocessors: { 'client/!(*spec).js': 'coverage' },
     coverageReporter: {
       type: 'lcov',
       dir: 'coverage',
