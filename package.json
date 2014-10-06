@@ -1,10 +1,10 @@
 {
-  "name": "MadProps",
+  "name": "TesselDrone",
   "version": "1.0.0-2",
-  "description": "MadProps",
+  "description": "Tessel Drone",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ConnectedMachines/MadProps.git"
+    "url": "https://github.com/ConnectedMachines/TesselDrone.git"
   },
   "scripts": {
     "start": "node server.js",
@@ -12,9 +12,9 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ConnectedMachines/MadProps/issues"
+    "url": "https://github.com/ConnectedMachines/TesselDrone/issues"
   },
-  "homepage": "https://github.com/ConnectedMachines/MadProps",
+  "homepage": "https://github.com/ConnectedMachines/TesselDrone",
   "dependencies": {
     "cors": "^2.4.2",
     "express": "^4.9.4",
@@ -38,7 +38,7 @@
     "karma-chrome-launcher":"^0.1.4",
     "karma-spec-reporter": "0.0.13"
   },
-  "subdomain": "madprops.azurewebsites.net",
+  "subdomain": "TesselDrone.azurewebsites.net",
   "engines": {
     "node": "0.10.x"
   }
