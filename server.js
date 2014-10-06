@@ -43,7 +43,7 @@ app.post('/data', function(req, res){
 });
 
 app.get('/data', function(req, res){
-  console.log('GETRES:',tesselData)
+  // console.log('GETRES:',tesselData)
   res.send(tesselData);
 });
 

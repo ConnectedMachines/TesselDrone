@@ -73,6 +73,14 @@ angular.module('MadProps')
 
             var drone = new THREE.Object3D();
 
+            var currPitch = 0;
+            var currYaw = 0;
+            var currRoll = 0;
+
+            var pitchArr = [];
+            var yawArr = [];
+            var rollArr = [];
+
             // Because the engines are built from two separate models, sometimes the load time of one component will
             // be faster than the other making their index in the child array of their parent inconsistant. To fix this 
             // issue we determine which model is the propeller at runtime.
@@ -282,16 +290,60 @@ angular.module('MadProps')
             };
           }/************ 3D Workspace lower edge ******************/
 
+          // helper functions for easing between attitude changes
+
+          var _inOutQuad = function(t, b, c, d){
+            t /= d/2;
+            if(t < 1){
+              return c/2*t*t + b;
+            }
+            t--;
+            return -c/2 * (t*(t-2) - 1) + b;
+          };
+
+          var _inOutLinear = function (t, b, c, d) {
+            return c*t/d + b;
+          };
+
+          var easeMovement = function(b, c, d){
+            var results = [];
+            for(var t = 0; t < d; t++){
+              results.push(_inOutLinear(t, b, c, d));
+            }
+            results.shift();
+            results.push(c);
+            return results
+          };
 
           // the render loop
           var render = function () {
-            requestAnimationFrame(render);
+            if(document.getElementsByTagName('dronemodel').length){
+              requestAnimationFrame(render);
+            }
+            console.log('renderer looped');
 
             //set attitude of drone
             if(drone && scope.attitude){
-              drone.rotation.x = scope.attitude.pitch//THREE.Math.degToRad(scope.attitude.pitch);
-              drone.rotation.y = scope.attitude.yaw//THREE.Math.degToRad(scope.attitude.yaw);
-              drone.rotation.z = scope.attitude.roll//THREE.Math.degToRad(scope.attitude.roll);
+              var newPitch = Math.round(scope.attitude.pitch*(180/Math.PI));
+              var newRoll = Math.round(scope.attitude.roll*(180/Math.PI));
+
+              // check for diff in attitude
+              if(newPitch !== currPitch){
+                pitchArr = easeMovement(currPitch, newPitch, 25);
+                currPitch = newPitch;
+              }
+              if(newRoll !== currRoll){
+                rollArr = easeMovement(currRoll, newRoll, 25);
+                currRoll = newRoll;
+              }
+
+              // apply attitude adjustments if available
+              if(pitchArr.length){
+                drone.rotation.x = pitchArr.shift()*(Math.PI/180);
+              }
+              if(rollArr.length){
+                drone.rotation.z = rollArr.shift()*(Math.PI/180);
+              }
             }
 
             // rotate each engine's propeller
