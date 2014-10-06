@@ -2,8 +2,8 @@
 // REQUIRES
 // ###############################
 var cors = require('cors');
-var bodyParser = require('body-parser');
 var ws = require('nodejs-websocket');
+var express = require('express');
 var app = require('express')();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
@@ -14,66 +14,66 @@ var io = require('socket.io')(server);
 var tesselConnected = false;
 var tesselPreflightComplete = false;
 var port = process.env.PORT || 3000;
-var tesselIP = '10.8.31.216';
 
 // ###############################
 // EXPRESS CONFIGURATION
 // ###############################
 
-
 app.use(cors());
 app.use(express.static(__dirname));
-app.use(bodyParser.json());
 
 // ###############################
 // WEBSOCKETS SETUP - TO TESSEL
 // ###############################
-var connection = ws.connect('ws://' + tesselIP + ':' + port, function () {
-  tesselConnected = true;
-  console.log('Connected to Tessel');
-});
 
-var tesselToClientBridge(socket){
+// This must match the web socket port on the Tessel side
+var webSocketPort = 8000;
+var webSocketServer = ws.createwebSocketServer(function (conn) {
+    console.log("New connection");
+    // When the client closes the connection, notify us.
+    // This is where there should be clean up of listeners
+    conn.on("close", function (code, reason) {
+      console.log("Connection closed: ", code, reason);
+    });
+  }).listen(webSocketPort);
+  console.log('listening on port', webSocketPort);
+};
+
+var tesselToClientBridge = function (socket) {
   // When we get info back from the tessel websocket we want to let the client know
-  connection.on('text', function (data) {
-    data = JSON.parse(data);
-    socket.volatile.emit('droneData', { attitude: {
-                                          pitch: data.xAxis,
-                                          roll: data.yAxis,
-                                          yaw: data.zAxis
-                                        },
-                                        motorThrottles: {
-                                          motor1: data.motor1,
-                                          motor2: data.motor2,
-                                          motor3: data.motor3,
-                                          motor4: data.motor4
-                                        }
-                                      });
+  webSocketServer.on('text', function (data) {
+    console.log(data);
+    socket.emit('droneData', data);
   });
 };
 
 // ###############################
 // HELPER FUNCTIONS
 // ###############################
+
+// Check to make sure that we have a connection before 
+// trying to send that connection data
 var tesselPreflight = function (callback) {
-  if (tesselPreflightComplete) {
-    callback();
-  } else if (tesselConnected) {
-    tesselPreflightComplete = true;
-    connection.sendText('preflight');
-    callback();
-  } else {
-    tesselPreflight(callback);
-  }
+  setTimeout(function(){
+    if (tesselPreflightComplete) {
+      callback();
+    } else if (tesselConnected) {
+      tesselPreflightComplete = true;
+      webSocketServer.connection.sendText('preflight');
+      callback();
+    } else {
+      tesselPreflight(callback);
+    }
+  }, 250);
 };
 
 var tesselTakeoff = function (callback) {
-  connection.sendText('takeoff');
+  webSocketServer.connection.sendText('takeoff');
   callback();
 };
 
 var tesselLand = function (callback) {
-  connection.sendText('land');
+  webSocketServer.connection.sendText('land');
   callback();
 };
 
@@ -81,23 +81,23 @@ var tesselLand = function (callback) {
 // ROUTING SETUP
 // ###############################
 app.get('/', function (req, res) {
-  res.redirect('/client');
+  res.redirect('/client/');
 });
 
 io.on('connection', function (socket) {
   socket.emit('status', { status: 'Successfuly Connected' });
   socket.on('land', function (data) {
-    tesselLand(function(){
+    tesselLand(function () {
       socket.emit('status', { status: 'Landing Command Recieved' });
     });
   });
   socket.on('preflight', function (data) {
-    tesselPreflight(function(){
+    tesselPreflight(function () {
       socket.emit('status', { status: 'Preflight Command Recieved' });
     });
   });
   socket.on('takeoff', function (data) {
-    tesselTakeoff(function(){
+    tesselTakeoff(function () {
       socket.emit('status', { status: 'Takeoff Command Recieved' });
     });
   });
