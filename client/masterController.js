@@ -1,6 +1,5 @@
-var testFoo;
 angular.module('MadProps')
-  .controller('MasterController', ['$scope', '$http', function($scope, $http){
+  .controller('MasterController', ['$scope', '$http', 'socket', function($scope, $http, socket){
     var d3VisualizerLoaded = false;
     var threeVisualizerLoaded = false;
 
@@ -12,20 +11,11 @@ angular.module('MadProps')
       threeVisualizerLoaded = true;
       onVisualizersLoaded();
     });
-
-    var onVisualizersLoaded = function(){
+    $scope.$on('socket:droneData', function (ev, data) {
       if(d3VisualizerLoaded && threeVisualizerLoaded){
-        setInterval(function(){
-          $http({method: 'GET', url: '/data'})
-            .success(function(data, status, headers, config){
-              // console.log('onVis:',data);
-              $scope.$broadcast('attitudeData', data.attitude);
-              $scope.$broadcast('throttleData', data.motorThrottles);
-            })
-            .error(function(data, status, headers, config){
-              console.log('GET VISUALIZER DATA ERROR:', data);
-            });
-        },100);
+        data = JSON.parse(data);
+        $scope.$broadcast('attitudeData', data.attitude);
+        $scope.$broadcast('throttleData', data.motorThrottles);
       }
-    }
+    });
   }]);
