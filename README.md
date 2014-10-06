@@ -1,6 +1,6 @@
-#TesselDrone [![Build Status](https://secure.travis-ci.org/ConnectedMachines/MadProps.png)](http://travis-ci.org/ConnectedMachines/MadProps) [![Coverage Status](https://img.shields.io/coveralls/ConnectedMachines/MadProps.svg)](https://coveralls.io/r/ConnectedMachines/MadProps)
+#TesselDrone [![Build Status](https://secure.travis-ci.org/ConnectedMachines/TesselDrone.png)](http://travis-ci.org/ConnectedMachines/TesselDrone) [![Coverage Status](https://img.shields.io/coveralls/ConnectedMachines/TesselDrone.svg)](https://coveralls.io/r/ConnectedMachines/TesselDrone)
 
-mLuby coverage: [![Build Status](https://secure.travis-ci.org/mLuby/MadProps.png)](http://travis-ci.org/ConnectedMachines/MadProps) [![Coverage Status](https://img.shields.io/coveralls/mLuby/MadProps.svg)](https://coveralls.io/r/mLuby/MadProps)
+mLuby coverage: [![Build Status](https://secure.travis-ci.org/mLuby/TesselDrone.png)](http://travis-ci.org/ConnectedMachines/TesselDrone) [![Coverage Status](https://img.shields.io/coveralls/mLuby/TesselDrone.svg)](https://coveralls.io/r/mLuby/TesselDrone)
 
 [Getting Started](docs/GETTING-STARTED.md)
 
