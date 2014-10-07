@@ -6,47 +6,51 @@ var accelData = require("mainControl.js").accelData;
 
 
 // ###############################
-// SERVER SETUP
+// WEBSOCKET SETUP
 // ###############################
 
-var startServer = function () {
-  var port = 8000;
-  var server = ws.createServer(function (conn) {
-    console.log("New connection");
-    conn.on("text", function (str) {
-      // This will basicly be our control switch
-      if (str === 'land') {
-        console.log("Received " + str);
-
-      } else if (str === 'takeOff') {
-        console.log("Received " + str);
-        // This is temp code and will need to be rewritten such that 
-        // when the connection closes this on data is removed
-        accel.on('data', function (xyz) {
-          accelData.x = xyz[0];
-          accelData.y = xyz[1];
-          accelData.z = xyz[2];
-          conn.sendText("X-Axis: " + accelData.x + "\nY-Axis: " + accelData.y + "\nZ-Axis: " + accelData.z);
-        });
-      } else if (str === 'preflight') {
-        console.log("Received " + str);
-      } else {
-        console.log("Invalid Command: ", str);
-      }
-    });
-
-    // When the client closes the connection, notify us.
-    // This is where there should be clean up of listeners
-    // if 
-    conn.on("close", function (code, reason) {
-      console.log("Connection closed: ", code, reason);
-    });
-  }).listen(port);
-
-  console.log('listening on port', port);
+//This must match the web socket port on the server side
+var webSocketPort = 8000
+var connectToServer = function () {
+  var connection = ws.connect('ws://TesselDrone.azurewebsites.net:' + webSocketPort, function () {
+    tesselConnected = true;
+    console.log('Connected to Tessel');
+  });
+  connection.on("text", function (str) {
+    // This will basicly be our control switch
+    if (str === 'land') {
+      console.log("Received " + str);
+    } else if (str === 'takeOff') {
+      console.log("Received " + str);
+      // This is temp code and will need to be rewritten such that 
+      // when the connectionection closes this on data is removed
+    } else if (str === 'preflight') {
+      console.log("Received " + str);
+      accel.on('data', function (xyz) {
+        console.log(xyz);
+        accelData.x = xyz[0];
+        accelData.y = xyz[1];
+        accelData.z = xyz[2];
+        var data = {
+          attitude: {
+            pitch: accelData.x,
+            roll: accelData.y,
+            yaw: accelData.z
+          },
+          motorThrottles: {
+            motor1: 0,
+            motor2: 0,
+            motor3: 0,
+            motor4: 0
+          }
+        };
+        connection.sendText(JSON.stringify(data));
+      });
+    } else {
+      console.log("Invalid Command: ", str);
+    }
+  });
 };
-
-
 // ###############################
 // WIFI SETUP
 // ###############################
@@ -82,28 +86,35 @@ var tryConnect = function () {
 wifi.on('connect', function (err, data) {
   // Start the server up
   console.log('connect emitted', err, data);
-  startServer();
+  connectToServer();
 });
 
 wifi.on('disconnect', function (err, data) {
   // Wifi dropped, want to call connect() again?
   // Also immediate stop to all motors
   console.log('disconnect emitted', err, data);
+  console.log('Attempting reconnection');
+  tryConnect();
 });
 
 wifi.on('timeout', function (err) {
   // Tried to connect but couldn't, retry
   console.log('timeout emitted', err);
-  connect();
+  tryConnect();
 });
 
 wifi.on('error', function (err) {
-  // One of the following happened
-  // 1. tried to disconnect while not connected
-  // 2. tried to disconnect while in the middle of trying to connect
-  // 3. tried to initialize a connection without first waiting for a timeout or a disconnect
   // Result make sure that motors are shutoff!
+  // Reset the wifi chip
   console.log('error emitted', err);
+  console.log('Restarting Wifi');
+  wifi.disable(function () {
+    console.log('Wifi Disabled');
+    wifi.enable(function () {
+      console.log('Wifi Enabled \nRestarting Complete \n Attempting Reconnection');
+      tryConnect();
+    });
+  });
 });
 
 // ###############################
