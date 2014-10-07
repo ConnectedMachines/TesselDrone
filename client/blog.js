@@ -2,8 +2,8 @@ angular.module('MadProps')
 
 .config(function($stateProvider){
   $stateProvider
-    .state('about', {
-      url: '/about',
-      templateUrl: 'about.html'
+    .state('blog', {
+      url: '/blog',
+      templateUrl: 'blog.html'
     })
 })
