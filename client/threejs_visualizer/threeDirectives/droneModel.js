@@ -18,8 +18,8 @@ angular.module('MadProps')
           // create colored background skybox                                 edit this to change color: 0x######
           scene.add( new THREE.Mesh(new THREE.BoxGeometry(200,200,200), new THREE.MeshBasicMaterial({color: 0xffffff, side: THREE.BackSide})) );
           // create ambient skylight
-          scene.add( new THREE.HemisphereLight(0xffffff,0xffffff,0.25));
-          var light = new THREE.PointLight(0xffffff, 0.75, 100);
+          scene.add( new THREE.HemisphereLight(0xffffff,0xffffff,0.45));
+          var light = new THREE.PointLight(0xffffff, 0.75, 200);
           light.position.set(0,100,0);
           scene.add(light);
 
@@ -67,16 +67,36 @@ angular.module('MadProps')
           }
 
           {/************ 3D Workspace upper edge ******************/
-            var matteBlue = new THREE.MeshLambertMaterial({color: 0x0000ff});
-            var matteRed = new THREE.MeshLambertMaterial({color: 0xff0000});
-            var matteGreen = new THREE.MeshLambertMaterial({color: 0x00ff00});
+            var bodyColor = new THREE.MeshLambertMaterial({color: 0xD000E8});
+            var propellerColor = new THREE.MeshLambertMaterial({color: 0x2E3833});
+            var motorColor = new THREE.MeshLambertMaterial({color: 0x8EAD9E});
 
-            scope.drone = new THREE.Object3D();
-            scope.engine1 = null;
-            scope.engine2 = null;
-            scope.engine3 = null;
-            scope.engine4 = null;
+            var drone = new THREE.Object3D();
 
+            var currPitch = 0;
+            var currYaw = 0;
+            var currRoll = 0;
+
+            var pitchArr = [];
+            var yawArr = [];
+            var rollArr = [];
+
+            // Because the engines are built from two separate models, sometimes the load time of one component will
+            // be faster than the other making their index in the child array of their parent inconsistant. To fix this 
+            // issue we determine which model is the propeller at runtime.
+
+            // References to the engines
+            var engine1 = null;
+            var engine2 = null;
+            var engine3 = null;
+            var engine4 = null;
+
+            // References to the propellers to be set once the server recieves first throttle data
+            var prop1 = null;
+            var prop2 = null;
+            var prop3 = null;
+            var prop4 = null;
+            
             {// load all assets async
               var _frameLoaded = false;
               var _engineTemplateL_motorLoaded = false;
@@ -161,42 +181,29 @@ angular.module('MadProps')
               };
             }
 
-            // tobe run once all assets loaded
-            var loadComplete = function(){
-              console.log('success!!!');
-
-              scope.engine1 = engineTemplate_L.clone();
-              scope.engine1.position.set(-40,5,-40);
-              scope.engine1.throttle = 0;
-              _wrapper.add(scope.engine1);
-
-              scope.engine2 = engineTemplate_L.clone();
-              scope.engine2.position.set(40,5,40);
-              scope.engine2.throttle = 0;
-              _wrapper.add(scope.engine2);
-
-              scope.engine3 = engineTemplate_R.clone();
-              scope.engine3.position.set(-40,5,40);
-              scope.engine3.throttle = 0;
-              _wrapper.add(scope.engine3);
-
-              scope.engine4 = engineTemplate_R.clone();
-              scope.engine4.position.set(40,5,-40);
-              scope.engine4.throttle = 0;
-              _wrapper.add(scope.engine4);
-
-              _wrapper.rotation.y = THREE.Math.degToRad(-45);
-              scope.drone.add(_wrapper);
-
-              scene.add(scope.drone);
-            };
-
             var _wrapper = new THREE.Object3D();
-                // load frame
-                assetLoader(_wrapper, {
-                  material: matteBlue,
-                  pathURL: 'assets/diy_mini_quad_v3_one_piece.stl',
-                  scale: 0.5,
+              // load frame
+              assetLoader(_wrapper, {
+                material: bodyColor,
+                pathURL: 'assets/diy_mini_quad_v3_one_piece.stl',
+                scale: 0.5,
+                position: [0,0,0],
+                rotation: [
+                  THREE.Math.degToRad(90),// x
+                  THREE.Math.degToRad(0), // y
+                  THREE.Math.degToRad(0)  // z
+                ]
+              }, function(){
+                loadProgress.frame = true;
+              });
+
+              // create template engine with left prop
+              var engineTemplate_L = new THREE.Object3D();
+                // load motor
+                assetLoader(engineTemplate_L, {
+                  material: motorColor,
+                  pathURL: 'assets/N5065_Motor.stl',
+                  scale: 3,
                   position: [0,0,0],
                   rotation: [
                     THREE.Math.degToRad(90),// x
@@ -204,136 +211,185 @@ angular.module('MadProps')
                     THREE.Math.degToRad(0)  // z
                   ]
                 }, function(){
-                  loadProgress.frame = true;
+                  loadProgress.engineTemplateL_motor = true;
                 });
 
-                // create template engine with left prop
-                var engineTemplate_L = new THREE.Object3D();
-                    // load motor
-                    assetLoader(engineTemplate_L, {
-                      material: matteGreen,
-                      pathURL: 'assets/N5065_Motor.stl',
-                      scale: 3,
-                      position: [0,0,0],
-                      rotation: [
-                        THREE.Math.degToRad(90),// x
-                        THREE.Math.degToRad(0), // y
-                        THREE.Math.degToRad(0)  // z
-                      ]
-                    }, function(){
-                      loadProgress.engineTemplateL_motor = true;
-                    });
+                // load left prop
+                assetLoader(engineTemplate_L, {
+                  name: 'propeller',
+                  material: propellerColor,
+                  pathURL: 'assets/prop_left.stl',
+                  scale: 0.4,
+                  position: [0,13.5,0],
+                  rotation: [
+                    THREE.Math.degToRad(90),// x
+                    THREE.Math.degToRad(0), // y
+                    THREE.Math.degToRad(0)  // z
+                  ]
+                }, function(){
+                  loadProgress.engineTemplateL_prop = true;
+                });
 
-                    // load left prop
-                    assetLoader(engineTemplate_L, {
-                      name: 'propeller',
-                      material: matteRed,
-                      pathURL: 'assets/prop_left.stl',
-                      scale: 0.4,
-                      position: [0,13.5,0],
-                      rotation: [
-                        THREE.Math.degToRad(90),// x
-                        THREE.Math.degToRad(0), // y
-                        THREE.Math.degToRad(0)  // z
-                      ]
-                    }, function(){
-                      loadProgress.engineTemplateL_prop = true;
-                    });
+              // create template engine with right prop
+              var engineTemplate_R = new THREE.Object3D();
+                // load motor
+                assetLoader(engineTemplate_R, {
+                  material: motorColor,
+                  pathURL: 'assets/N5065_Motor.stl',
+                  scale: 3,
+                  position: [0,0,0],
+                  rotation: [
+                    THREE.Math.degToRad(90),// x
+                    THREE.Math.degToRad(0), // y
+                    THREE.Math.degToRad(0)  // z
+                  ]
+                }, function(){
+                  loadProgress.engineTemplateR_motor = true;
+                });
 
-                // create template engine with right prop
-                var engineTemplate_R = new THREE.Object3D();
-                    // load motor
-                    assetLoader(engineTemplate_R, {
-                      material: matteGreen,
-                      pathURL: 'assets/N5065_Motor.stl',
-                      scale: 3,
-                      position: [0,0,0],
-                      rotation: [
-                        THREE.Math.degToRad(90),// x
-                        THREE.Math.degToRad(0), // y
-                        THREE.Math.degToRad(0)  // z
-                      ]
-                    }, function(){
-                      loadProgress.engineTemplateR_motor = true;
-                    });
+                // load right prop
+                assetLoader(engineTemplate_R, {
+                  name: 'propeller',
+                  material: propellerColor,
+                  pathURL: 'assets/prop_right.stl',
+                  scale: 0.4,
+                  position: [0,13.5,0],
+                  rotation: [
+                    THREE.Math.degToRad(90),// x
+                    THREE.Math.degToRad(0), // y
+                    THREE.Math.degToRad(0)  // z
+                  ]
+                }, function(){
+                  loadProgress.engineTemplateR_prop = true;
+                });
+          
+            // to be run once all assets loaded
+            var loadComplete = function(){
+              engine1 = engineTemplate_L.clone();
+              engine1.position.set(-40,5,-40);
+              _wrapper.add(engine1);
 
-                    // load right prop
-                    assetLoader(engineTemplate_R, {
-                      name: 'propeller',
-                      material: matteRed,
-                      pathURL: 'assets/prop_right.stl',
-                      scale: 0.4,
-                      position: [0,13.5,0],
-                      rotation: [
-                        THREE.Math.degToRad(90),// x
-                        THREE.Math.degToRad(0), // y
-                        THREE.Math.degToRad(0)  // z
-                      ]
-                    }, function(){
-                      loadProgress.engineTemplateR_prop = true;
-                    });
-            
+              engine2 = engineTemplate_L.clone();
+              engine2.position.set(40,5,40);
+              _wrapper.add(engine2);
+
+              engine3 = engineTemplate_R.clone();
+              engine3.position.set(-40,5,40);
+              _wrapper.add(engine3);
+
+              engine4 = engineTemplate_R.clone();
+              engine4.position.set(40,5,-40);
+              _wrapper.add(engine4);
+
+              _wrapper.rotation.y = THREE.Math.degToRad(-45);
+              drone.add(_wrapper);
+              drone.position.setY(-20);
+
+              scene.add(drone);
+              scope.threeVisualizerIsLoaded = true;
+            };
           }/************ 3D Workspace lower edge ******************/
 
-          var prop1 = null;
-          var prop2 = null;
-          var prop3 = null;
-          var prop4 = null;
+          // helper functions for easing between attitude changes
+
+          var _inOutQuad = function(t, b, c, d){
+            t /= d/2;
+            if(t < 1){
+              return c/2*t*t + b;
+            }
+            t--;
+            return -c/2 * (t*(t-2) - 1) + b;
+          };
+
+          var _inOutLinear = function (t, b, c, d) {
+            return c*t/d + b;
+          };
+
+          var easeMovement = function(b, c, d){
+            var results = [];
+            for(var t = 0; t < d; t++){
+              results.push(_inOutLinear(t, b, c, d));
+            }
+            results.shift();
+            results.push(c);
+            return results
+          };
 
           // the render loop
           var render = function () {
-            requestAnimationFrame(render);
+            if(document.getElementsByTagName('dronemodel').length){
+              requestAnimationFrame(render);
+            }
 
             //set attitude of drone
-            if(scope.drone && scope.attitude){
-              scope.drone.rotation.x = THREE.Math.degToRad(scope.attitude.pitch);
-              scope.drone.rotation.y = THREE.Math.degToRad(scope.attitude.yaw);
-              scope.drone.rotation.z = THREE.Math.degToRad(scope.attitude.roll);
+            if(drone && scope.attitude){
+              var newPitch = Math.round(scope.attitude.pitch*(180/Math.PI));
+              var newRoll = Math.round(scope.attitude.roll*(180/Math.PI));
+
+              // check for diff in attitude
+              if(newPitch !== currPitch){
+                pitchArr = easeMovement(currPitch, newPitch, 25);
+                currPitch = newPitch;
+              }
+              if(newRoll !== currRoll){
+                rollArr = easeMovement(currRoll, newRoll, 25);
+                currRoll = newRoll;
+              }
+
+              // apply attitude adjustments if available
+              if(pitchArr.length){
+                drone.rotation.x = pitchArr.shift()*(Math.PI/180);
+              }
+              if(rollArr.length){
+                drone.rotation.z = rollArr.shift()*(Math.PI/180);
+              }
             }
 
             // rotate each engine's propeller
-            if(scope.engine1){
-              if(!prop1){
-                scope.engine1.children.forEach(function(mesh){
-                  if(mesh.name === 'propeller'){
-                    prop1 = mesh;
-                  }
-                });
-              }else{
-                prop1.rotation.z -= scope.engine1.throttle/10;
+            if(drone && scope.throttle){
+              if(engine1){
+                if(!prop1){// checks if propeller needs to be referenced
+                  engine1.children.forEach(function(mesh){
+                    if(mesh.name === 'propeller'){
+                      prop1 = mesh;// associates the THREEjs mesh with a prop variable for later referencing
+                    }
+                  });
+                }else{// propeller has already be assigned to a variable and is ready to be manipulated
+                  prop1.rotation.z -= scope.throttle.e1;
+                }
               }
-            }
-            if(scope.engine2){
-              if(!prop2){
-                scope.engine2.children.forEach(function(mesh){
-                  if(mesh.name === 'propeller'){
-                    prop2 = mesh;
-                  }
-                });
-              }else{
-                prop2.rotation.z -= scope.engine2.throttle/10;
+              if(engine2){
+                if(!prop2){// checks if propeller needs to be referenced
+                  engine2.children.forEach(function(mesh){
+                    if(mesh.name === 'propeller'){
+                      prop2 = mesh;// associates the THREEjs mesh with a prop variable for later referencing
+                    }
+                  });
+                }else{// propeller has already be assigned to a variable and is ready to be manipulated
+                  prop2.rotation.z -= scope.throttle.e2;
+                }
               }
-            }
-            if(scope.engine3){
-              if(!prop3){
-                scope.engine3.children.forEach(function(mesh){
-                  if(mesh.name === 'propeller'){
-                    prop3 = mesh;
-                  }
-                });
-              }else{
-                prop3.rotation.z += scope.engine3.throttle/10;
+              if(engine3){
+                if(!prop3){// checks if propeller needs to be referenced
+                  engine3.children.forEach(function(mesh){
+                    if(mesh.name === 'propeller'){
+                      prop3 = mesh;// associates the THREEjs mesh with a prop variable for later referencing
+                    }
+                  });
+                }else{// propeller has already be assigned to a variable and is ready to be manipulated
+                  prop3.rotation.z += scope.throttle.e3;
+                }
               }
-            }
-            if(scope.engine4){
-              if(!prop4){
-                scope.engine4.children.forEach(function(mesh){
-                  if(mesh.name === 'propeller'){
-                    prop4 = mesh;
-                  }
-                });
-              }else{
-                prop4.rotation.z += scope.engine4.throttle/10;
+              if(engine4){
+                if(!prop4){// checks if propeller needs to be referenced
+                  engine4.children.forEach(function(mesh){
+                    if(mesh.name === 'propeller'){
+                      prop4 = mesh;// associates the THREEjs mesh with a prop variable for later referencing
+                    }
+                  });
+                }else{// propeller has already be assigned to a variable and is ready to be manipulated
+                  prop4.rotation.z += scope.throttle.e4;
+                }
               }
             }
 
@@ -341,7 +397,6 @@ angular.module('MadProps')
           };
           // kickoff render loop
           render();
-          console.log(context);
         });
       }
     }
