@@ -5,7 +5,10 @@ module.exports = function(config) {
     frameworks: ['jasmine'],
 
     files: [
-      '**.spec.js'
+      'bower_components/angular/angular.js',
+      'client/d3Angular.js',
+      'client/app.js',
+      '**/**.spec.js'
     ],
 
     exclude: [
@@ -17,11 +20,14 @@ module.exports = function(config) {
     ],
 
     plugins: [
+      'karma-chrome-launcher',
       'karma-phantomjs-launcher',
       'karma-jasmine',
       'karma-spec-reporter'
     ],
 
-    reporters: ['spec']
+    reporters: ['spec'],
+
+    singleRun: true
   });
 };

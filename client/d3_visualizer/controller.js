@@ -65,16 +65,4 @@ angular.module('MadProps')
         $scope.renderEngine4('#707070');// grey (off)
       }
     }
-
-    //update color of propellers when new data is available
-    // $scope.$on('throttleData', function(){
-    //   var data = arguments[1];
-    //   //console.log(data)
-    //   setEngine1(data.e1);
-    //   setEngine2(data.e2);
-    //   setEngine3(data.e3);
-    //   setEngine4(data.e4);
-    // })
   }]);
-
-  

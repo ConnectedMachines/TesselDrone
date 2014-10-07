@@ -1,67 +1,33 @@
 angular.module('MadProps')
-  
-  .controller('DroneCommandController', function($scope, Requests){
-    var done = this;
+  .controller('DroneCommandController', function ($scope, Requests, socket) {
     $scope.drone = {};
     $scope.drone.status = "idle";
+    //Possible Socket.io
+    //Angular socket io
 
-    $scope.preflight = function(){
+
+    $scope.preflight = function () {
       $scope.drone.status = "Checking motors";
-      Requests.preflight()
-        .then(function(status){
-          $scope.drone.status = "Ready to fly";
-        })
-    }
-
-    $scope.takeOff = function(){
-      $scope.drone.status = "Taking Off";
-      Requests.takeOff()
-        .then(function(){
-          $scope.drone.status = "Successful Takeoff";
-        });
+      Requests.emitCondition('preflight');
     };
-    
-    $scope.land = function(){
+
+    $scope.takeOff = function () {
+      $scope.drone.status = "Taking Off";
+      Requests.emitCondition('takeoff');
+    };
+    $scope.land = function () {
       $scope.drone.status = "Landing";
-      Requests.land()
-        .then(function(){
-          $scope.drone.status = "Successfully Landed";
-        });
+      Requests.emitCondition('land');
     };
   })
 
-  .factory('Requests', function($http){
-    // var api = '10.8.31.216:8000';
-    var preflight = function(){
-      return $http({
-        method: 'GET',
-        url: '//10.8.31.216:8000/preflight'
-      }).success(function(data){
-        return "Ready to fly"
-      })
-    };
-    var takeOff = function(){
-      return $http({
-        method: 'GET',
-        url: '//10.8.31.216:8000/takeOff'
-      })
-      .success(function(data){
-        return "Successful Takeoff";
+  .factory('Requests', function (socket) {
+    var emitCondition = function (signalToEmit) {
+      socket.emit(signalToEmit, signalToEmit, function (data) {
+        return data;
       });
     };
-
-    var land = function(){
-      return $http({
-        method: 'GET',
-        url: '//10.8.31.216:8000/land'
-      }).success(function(){
-        return "Successfully Landed";
-      });
-    };
-
     return {
-      preflight: preflight,
-      takeOff: takeOff,
-      land: land
+      emitCondition: emitCondition
     };
   });
