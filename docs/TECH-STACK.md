@@ -1,4 +1,4 @@
-![tech stack](https://cloud.githubusercontent.com/assets/2483420/4520046/16fe425c-4cd8-11e4-8134-cf09bc23ba82.png)
+![Network/Control Flow](https://cloud.githubusercontent.com/assets/2483420/4538514/d2e26d9a-4df0-11e4-8eb5-ef4feabdfb76.png)
 
 - Client:
   - Angular
