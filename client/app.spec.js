@@ -1,12 +1,7 @@
 'use strict';
 
-describe('MadProps', function(){
-  it('is awesome', function(){
-    expect(true).toBe(true);
+describe('Client', function(){
+  it('exists', function(){
+    expect(angular.module('MadProps')).toBeDefined();
   });
-  it('is pending');
-  it('is pending', function(){
-    pending();
-  });
-  xit('is also pending', function(){});
 });

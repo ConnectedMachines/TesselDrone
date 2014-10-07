@@ -36,7 +36,8 @@ var webSocketServer = ws.createServer(function (conn) {
     console.log("Connection closed: ", code, reason);
   });
 }).listen(webSocketPort);
-console.log('listening on port', webSocketPort);
+
+console.log('Listening on port', webSocketPort,'for Tessel...');
 
 var tesselToClientBridge = function (socket) {
   // When we get info back from the tessel websocket we want to let the client know
@@ -106,5 +107,6 @@ io.on('connection', function (socket) {
 // ###############################
 // START LISTEINING
 // ###############################
-console.log('listening on port', port);
+
+console.log('Client ready on port', port+'...');
 server.listen(port);
