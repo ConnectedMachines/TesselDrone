@@ -22,7 +22,14 @@ var PIDoutput = function(axis, currentError){
   }
   previousTime[axis] = time; //setting historical time marker for next time function is called;
   
-  return (proportionConstant*currentError) + (integrationConstant * sumError[axis]) + (derivationConstant * deltaError / deltaTime);
+  var P = proportionConstant * currentError;
+  var I = integrationConstant * sumError[axis];
+  var D = derivationConstant * deltaError / deltaTime;
+
+  if(P > 0 && P + I + D < 0){
+    console.log("Houston we have a problem :" P, I, D)
+  }
+  return P + I + D;
 };
 
 exports.PIDoutput = PIDoutput;
