@@ -28,16 +28,15 @@ app.use(express.static(__dirname));
 
 // This must match the web socket port on the Tessel side
 var webSocketPort = 8000;
-var webSocketServer = ws.createwebSocketServer(function (conn) {
-    console.log("New connection");
-    // When the client closes the connection, notify us.
-    // This is where there should be clean up of listeners
-    conn.on("close", function (code, reason) {
-      console.log("Connection closed: ", code, reason);
-    });
-  }).listen(webSocketPort);
-  console.log('listening on port', webSocketPort);
-};
+var webSocketServer = ws.createServer(function (conn) {
+  console.log("New connection");
+  // When the client closes the connection, notify us.
+  // This is where there should be clean up of listeners
+  conn.on("close", function (code, reason) {
+    console.log("Connection closed: ", code, reason);
+  });
+}).listen(webSocketPort);
+console.log('listening on port', webSocketPort);
 
 var tesselToClientBridge = function (socket) {
   // When we get info back from the tessel websocket we want to let the client know
