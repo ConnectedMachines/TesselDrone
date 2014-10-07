@@ -11,17 +11,6 @@ var rename = require('gulp-rename');
 
 gulp.task('default', ['lint', 'test', 'css']);
 
-gulp.task('install-bower', function(){ // 2nd arg is a dependency: 'karma' must be finished first.
-  // Send results of istanbul's test coverage to coveralls.io.
-  return gulp.src('gulpfile.js', {read: false}) // You have to give it a file, but you don't have to read it.
-    .pipe(shell('npm install bower --global'));
-});
-gulp.task('bower-install', ['install-bower'], function(){ // 2nd arg is a dependency: 'karma' must be finished first.
-  // Send results of istanbul's test coverage to coveralls.io.
-  return gulp.src('gulpfile.js', {read: false}) // You have to give it a file, but you don't have to read it.
-    .pipe(shell('bower install'));
-});
-
 gulp.task('lint', function(){
   return gulp.src('*.js')
     .pipe(jshint())
@@ -30,7 +19,7 @@ gulp.task('lint', function(){
 });
 
 gulp.task('test', ['karma', 'coveralls']);
-gulp.task('karma', ['bower-install'], function (done) {
+gulp.task('karma', function (done) {
   karma.start({
     // Import Karma with settings from karma.conf.js.
     configFile: __dirname + '/karma.conf.js'
