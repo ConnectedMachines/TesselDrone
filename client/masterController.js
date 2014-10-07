@@ -5,11 +5,9 @@ angular.module('MadProps')
 
     $scope.$on('d3Loaded', function(){
       d3VisualizerLoaded = true;
-      onVisualizersLoaded();
     });
     $scope.$on('threeLoaded', function(){
       threeVisualizerLoaded = true;
-      onVisualizersLoaded();
     });
     $scope.$on('socket:droneData', function (ev, data) {
       if(d3VisualizerLoaded && threeVisualizerLoaded){
