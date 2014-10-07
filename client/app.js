@@ -1,7 +1,7 @@
 angular.module('MadProps', ['ngAnimate', 'ngMaterial', 'ui.router', 'THREE', 'd3', 'btford.socket-io'])
 
   .config(function($stateProvider, $urlRouterProvider){
-    $urlRouterProvider
+    $urlRouterProvider.when('', '/');
   })
 
   .controller('AppController', function(){
