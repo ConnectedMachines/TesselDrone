@@ -11,6 +11,10 @@ var launch = function(){
   });
 };
 
+var readyToLaunch = function(){
+  mainControl.userReady = true;
+};
+
 var checkIfReadyToLaunch = function(){
   setImmediate(function(){
     if(mainControl.userReady){
@@ -26,3 +30,4 @@ var checkIfReadyToLaunch = function(){
 
 
 exports.checkIfReadyToLaunch = checkIfReadyToLaunch;
+exports.readyToLaunch = readyToLaunch;
