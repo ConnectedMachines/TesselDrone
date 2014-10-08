@@ -1,10 +1,8 @@
 angular.module('MadProps')
-  .directive('dronestatus', ['d3Service', '$window', function(d3Service, $window){
+  .directive('dronestatus', function(){
     return {
       restrict: 'EA',
-      // scope: {},
       link: function(scope, element, attrs){
-        d3Service.d3().then(function(d3){
           // create the svg element inside the container
           var width = height = 480;
 
@@ -224,7 +222,6 @@ angular.module('MadProps')
             propellerData[3].color = hexColor;
             renderPropellers();
           };
-        });
       }
     }
-  }]);
+  });
