@@ -1,8 +1,11 @@
+var accel = require("./mainControl.js").accel;
+var accelData = require("./mainControl.js").accelData;
+var startPreflight = require('./preflight.js').startPreflight;
+var readyToLaunch = require('./launch.js').readyToLaunch;
+var land = require('./land.js').land
 var tessel = require('tessel');
 var wifi = require('wifi-cc3000');
 var ws = require("nodejs-websocket");
-var accel = require("mainControl.js").acceleromter;
-var accelData = require("mainControl.js").accelData;
 
 
 // ###############################
@@ -10,9 +13,9 @@ var accelData = require("mainControl.js").accelData;
 // ###############################
 
 //This must match the web socket port on the server side
-var webSocketPort = 8000
+var webSocketPort = 3000
 var connectToServer = function () {
-  var connection = ws.connect('ws://TesselDrone.azurewebsites.net:' + webSocketPort, function () {
+  var connection = ws.connect('wss://10.8.28.246' + webSocketPort, function () {
     tesselConnected = true;
     console.log('Connected to Tessel');
   });
@@ -20,8 +23,10 @@ var connectToServer = function () {
     // This will basicly be our control switch
     if (str === 'land') {
       console.log("Received " + str);
+      land();
     } else if (str === 'takeOff') {
       console.log("Received " + str);
+      readyToLaunch();
       // This is temp code and will need to be rewritten such that 
       // when the connectionection closes this on data is removed
     } else if (str === 'preflight') {
@@ -44,6 +49,7 @@ var connectToServer = function () {
             motor4: 0
           }
         };
+        startPreflight();
         connection.sendText(JSON.stringify(data));
       });
     } else {
