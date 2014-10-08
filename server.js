@@ -29,7 +29,7 @@ app.use(express.static(__dirname));
 // This must match the web socket port on the Tessel side
 var webSocketPort = 3000;
 var webSocketServer = ws.createServer(function (conn) {
-  console.log("New connection");
+  console.log("Connected to Tessel");
   tesselConnected = true;
   // When the client closes the connection, notify us.
   // This is where there should be clean up of listeners
@@ -60,10 +60,7 @@ var tesselToClientBridge = function (socket) {
 var tesselPreflight = function (callback) {
   console.log('inside preflight');
   setTimeout(function(){
-    if (tesselPreflightComplete) {
-  console.log('already ran');
-      callback();
-    } else if (tesselConnected) {
+    if (tesselConnected) {
   console.log('tesselConnected running');
       tesselPreflightComplete = true;
       webSocketServer.connections.forEach(function (conn) {
