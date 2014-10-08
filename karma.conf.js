@@ -6,12 +6,19 @@ module.exports = function(config) {
     singleRun: true,
     files: [
       'bower_components/angular/angular.js',
+      'bower_components/angular-morph/dist/angular-morph.js',
+      'bower_components/angular-animate/angular-animate.js',
+      'bower_components/angular-material/angular-material.js',
+      'bower_components/angular-ui-router/release/angular-ui-router.js',
+      'bower_components/angular-socket-io/socket.js',
+      'bower_components/angular-socket-io/mock/socket-io.js',
       'bower_components/angular-mocks/angular-mocks.js',
-      'client/d3Angular.js',
-      'client/app.js',
+      'client/app.js', // Load the main angular module before its dependencies.
       'client/*.js',
-      'client/*.spec.js'
+      'client/drone_control/*.js'
     ],
+
+    // port: 3000,
 
     exclude: [
       'node_modules',
@@ -28,7 +35,10 @@ module.exports = function(config) {
       'karma-coverage'
     ],
     reporters: ['spec', 'coverage'],
-    preprocessors: { 'client/!(*spec).js': 'coverage' },
+    preprocessors: { 
+      'client/!(*spec).js': 'coverage',
+      'client/drone_control/!(*spec).js': 'coverage'
+     },
     coverageReporter: {
       type: 'lcov',
       dir: 'coverage',

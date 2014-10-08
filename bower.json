@@ -15,9 +15,13 @@
   ],
   "dependencies": {
     "angular-material": "~0.0.3",
+    "angular-animate": "~1.3.0-rc.4",
+    "hammerjs": "2.0.4",
     "angular-ui-router": "~0.2.11",
     "angular-pusher": "~0.0.13",
-    "angular-socket-io": "~0.6.0"
+    "angular-socket-io": "~0.6.0",
+    "angular-morph": "*",
+    "angular-mocks": "~1.2.26"
   },
   "resolutions": {
     "angular": "1.3.0-rc.4"

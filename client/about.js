@@ -4,6 +4,16 @@ angular.module('MadProps')
   $stateProvider
     .state('about', {
       url: '/about',
-      templateUrl: '/client/about.html'
+      templateUrl: 'about.html'
     })
 })
+
+.controller('cardController', function ($scope) {
+ $scope.settings = {
+   closeEl: '.close',
+   overlay: {
+     templateUrl: './assets/networkdiagram.html',
+     scroll: false
+   }
+ }
+});
