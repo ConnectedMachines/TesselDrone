@@ -1,6 +1,6 @@
 var tessel = require('tessel');
 var accel = require('accel-mma84').use(tessel.port['D']);
-var servo = require('servo-pca9685').use(tessel.port['C']);
+var servo = require('servo-pca9685').use(tessel.port['A']);
 
 // ###############################
 // SETTINGS
@@ -40,6 +40,7 @@ var checkMark = '\u2714';
 var colorRed = '\033[91m';
 var colorWhite = '' //'\033[97m';
 var staticLog = function(motor1, motor2, motor3, motor4){
+  console.log('static log writing')
   process.stdout.write('\u001B[2J\u001B[0;0f'
     +'Motor throttles:\n'
     +'1: '+motor1.toFixed(3)+'\n'
@@ -59,7 +60,7 @@ var Motor = function(motorNumber){
   this.setThrottle = setThrottle
 }
 
-var motors = {
+exports.motors = {
   1: new Motor(1),
   2: new Motor(2),
   3: new Motor(3),
@@ -103,36 +104,40 @@ accel.on('data', function(xyz){
 });
 
 
-// e.g. motors[1].setThrottle(.2, 'x');
+// e.g. exports.motors[1].setThrottle(.2, 'x');
 function setThrottle(throttle, axis){
+  console.log('throttle ',throttle);
+  console.log('errorX ',error['x']);
+  console.log('errorY ',error['y']);
+  console.log('errorZ ',error['y']);
   var motor = this;
   var previousThrottle = motor.currentThrottle;
-  var averageThrottle = ((motors[1].currentThrottle + motors[2].currentThrottle + motors[3].currentThrottle + motors[4].currentThrottle)/4)
+  var averageThrottle = ((exports.motors[1].currentThrottle + exports.motors[2].currentThrottle + exports.motors[3].currentThrottle + exports.motors[4].currentThrottle)/4)
   motor.currentThrottle = throttle;
-  if(Math.max(motors[1].currentThrottle, motors[2].currentThrottle, motors[3].currentThrottle, motors[4].currentThrottle) - Math.min(motors[1].currentThrottle, motors[2].currentThrottle, motors[3].currentThrottle, motors[4].currentThrottle) <= maxThrottleDifference){
+  if(Math.max(exports.motors[1].currentThrottle, exports.motors[2].currentThrottle, exports.motors[3].currentThrottle, exports.motors[4].currentThrottle) - Math.min(exports.motors[1].currentThrottle, exports.motors[2].currentThrottle, exports.motors[3].currentThrottle, exports.motors[4].currentThrottle) <= maxThrottleDifference){
     servo.move(this.number, throttle, function(err){
       motor.currentThrottle = throttle;
-      log('1: '+motors[1].currentThrottle.toFixed(3)); 
-      log('2: '+motors[2].currentThrottle.toFixed(3)); 
-      log('3: '+motors[3].currentThrottle.toFixed(3)); 
-      log('4: '+motors[4].currentThrottle.toFixed(3));
-      log('A: '+((motors[1].currentThrottle+motors[2].currentThrottle+motors[3].currentThrottle+motors[4].currentThrottle)/4).toFixed(3));
-      log('X: '+accelData[0]);
-      log('Y: '+accelData[1]); 
-      showStaticLog();
+      console.log('1: '+exports.motors[1].currentThrottle.toFixed(3)); 
+      console.log('2: '+exports.motors[2].currentThrottle.toFixed(3)); 
+      console.log('3: '+exports.motors[3].currentThrottle.toFixed(3)); 
+      console.log('4: '+exports.motors[4].currentThrottle.toFixed(3));
+      console.log('A: '+((exports.motors[1].currentThrottle+exports.motors[2].currentThrottle+exports.motors[3].currentThrottle+exports.motors[4].currentThrottle)/4).toFixed(3));
+      console.log('X: '+accelData[0]);
+      console.log('Y: '+accelData[1]); 
+      // showStaticLog();
     });
   } else if(Math.abs(previousThrottle - averageThrottle) > Math.abs(motor.currentThrottle - averageThrottle)){
     console.log('outta bounds - moving towards average')
     servo.move(this.number, throttle, function(err){
       motor.currentThrottle = throttle;
-      log('1: '+motors[1].currentThrottle.toFixed(3)); 
-      log('2: '+motors[2].currentThrottle.toFixed(3)); 
-      log('3: '+motors[3].currentThrottle.toFixed(3)); 
-      log('4: '+motors[4].currentThrottle.toFixed(3));
-      log('A: '+((motors[1].currentThrottle+motors[2].currentThrottle+motors[3].currentThrottle+motors[4].currentThrottle)/4).toFixed(3));
-      log('X: '+accelData[0]);
-      log('Y: '+accelData[1]); 
-      showStaticLog();
+      console.log('1: '+exports.motors[1].currentThrottle.toFixed(3)); 
+      console.log('2: '+exports.motors[2].currentThrottle.toFixed(3)); 
+      console.log('3: '+exports.motors[3].currentThrottle.toFixed(3)); 
+      console.log('4: '+exports.motors[4].currentThrottle.toFixed(3));
+      console.log('A: '+((exports.motors[1].currentThrottle+exports.motors[2].currentThrottle+exports.motors[3].currentThrottle+exports.motors[4].currentThrottle)/4).toFixed(3));
+      console.log('X: '+accelData[0]);
+      console.log('Y: '+accelData[1]); 
+      // showStaticLog();
     })
   } else {
     console.log('Not valid throttle input.');
@@ -144,7 +149,7 @@ function setThrottle(throttle, axis){
 
 exports.servo = servo;
 exports.accel = accel;
-exports.motors = motors;
+// exports.exports.motors = exports.motors;
 exports.axisChanging = axisChanging;
 exports.error = error;
 exports.previousError = previousError;
@@ -157,3 +162,7 @@ exports.isHovering = isHovering;
 exports.motorMaxThrottle = motorMaxThrottle;
 exports.minThrottleIncrement = minThrottleIncrement;
 exports.accelData = accelData;
+exports.proportionConstant = proportionConstant  
+exports.integrationConstant = integrationConstant 
+exports.derivationConstant = derivationConstant
+exports.targetBalance = targetBala
