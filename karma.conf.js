@@ -40,9 +40,9 @@ module.exports = function(config) {
       'client/drone_control/!(*spec).js': 'coverage'
      },
     coverageReporter: {
-      type: 'lcov',
-      dir: 'coverage',
-      subdir: '.' // Output the results into ./coverage/
+      type: 'json',
+      dir: 'coverage/client',
+      subdir: '.' // stops formation of PhantomJS folder
     }
   });
 };

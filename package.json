@@ -7,9 +7,9 @@
     "url": "https://github.com/ConnectedMachines/TesselDrone.git"
   },
   "scripts": {
-    "postinstall": "node_modules/.bin/bower install",
+    "postinstall": "node_modules/.bin/bower install; cd tessel; npm install; cd ..",
     "start": "node server.js",
-    "test": "gulp test"
+    "test": "cd tessel; istanbul cover _mocha --dir ../coverage/tessel --report json -- -u exports -R spec; cd ..; gulp karma; istanbul report --lcov; gulp coveralls"
   },
   "license": "MIT",
   "bugs": {
@@ -19,6 +19,7 @@
   "dependencies": {
     "body-parser": "^1.9.0",
     "bower": "^1.3.12",
+    "chai": "^1.9.2",
     "cors": "^2.4.2",
     "express": "^4.9.4",
     "gulp": "^3.8.8",
@@ -27,11 +28,14 @@
     "gulp-rename": "^1.2.0",
     "gulp-shell": "^0.2.9",
     "gulp-stylus": "^1.3.3",
+    "istanbul": "^0.3.2",
+    "mocha": "^1.21.4",
     "nodejs-websocket": "^1.0.0",
+    "proxyquire": "^1.0.1",
+    "sinon": "^1.10.3",
+    "sinon-chai": "^2.6.0",
     "socket.io": "^1.1.0",
-    "stylus": "^0.49.1"
-  },
-  "devDependencies": {
+    "stylus": "^0.49.1",
     "coveralls": "^2.11.2",
     "gulp-jshint": "^1.8.4",
     "gulp-karma": "0.0.4",
