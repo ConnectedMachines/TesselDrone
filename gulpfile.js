@@ -51,5 +51,13 @@ gulp.task('tessel', function(){
       'tessel run <%= file.path %>'
       ], {cwd:'tessel'}));
 });
+
+//Runs Mocha tests
+gulp.task('mocha', function(){
+  return gulp.src('gulpfile.js', {read: false}) // You have to give it a file, but you don't have to read it.
+    .pipe(shell([
+      'mocha test'
+      ], {cwd:'tessel'}));
+});
 // Check out how this uses paths: 
 // https://github.com/sun-zheng-an/gulp-shell/blob/master/gulpfile.js
