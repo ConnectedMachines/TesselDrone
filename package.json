@@ -7,7 +7,7 @@
     "url": "https://github.com/ConnectedMachines/TesselDrone.git"
   },
   "scripts": {
-    "postinstall": "bower install",
+    "postinstall": "node_modules/.bin/bower install",
     "start": "node server.js",
     "test": "gulp test"
   },
