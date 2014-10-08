@@ -17,10 +17,10 @@ var webSocketPort = 3000
 var connectToServer = function () {
   if (!tesselConnected) {
     console.log('Inside connect to server')
-    var connection = ws.connect('ws://tesseldrone.azurewebsites.net:' + webSocketPort, function() {
+    var connection = ws.connect('ws://tesseldrone.cloudapp.net:3000', function() {
       // When we connect to the server, send some catchy text
       tesselConnected = true;
-      console.log('Connected to Tessel');
+      console.log('Connected to Web Server');
     });
     connection.on("text", function (text) {
       console.log("Echoed back from server:", text);
