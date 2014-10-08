@@ -1,10 +1,20 @@
 var mainControl = require('./mainControl.js');
-var userReady = mainControl.userReady;
-var whichAxisToStabilize = require('.stabilize.js').whichAxisToStabilize;
+var whichAxisToStabilize = require('./stabilize.js').whichAxisToStabilize;
+
+var launch = function(){
+  console.log('launch')
+  setImmediate(function(){
+    whichAxisToStabilize('x');
+  });
+  setImmediate(function(){
+    whichAxisToStabilize('y');
+  });
+};
 
 var checkIfReadyToLaunch = function(){
   setImmediate(function(){
-    if(userReady){
+    if(mainControl.userReady){
+      console.log('user ready')
       setTimeout(function(){
         launch();
       }, 500);
@@ -14,13 +24,5 @@ var checkIfReadyToLaunch = function(){
   })
 };
 
-var launch = function(){
-  setImmediate(function(){
-    whichAxisToStabilize('x');
-  });
-  setImmediate(function(){
-    whichAxisToStabilize('y');
-  });
-};
 
 exports.checkIfReadyToLaunch = checkIfReadyToLaunch;
