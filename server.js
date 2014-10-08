@@ -27,7 +27,7 @@ app.use(express.static(__dirname));
 // ###############################
 
 // This must match the web socket port on the Tessel side
-var webSocketPort = 8000;
+var webSocketPort = 3000;
 var webSocketServer = ws.createServer(function (conn) {
   console.log("New connection");
   // When the client closes the connection, notify us.
