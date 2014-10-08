@@ -4,7 +4,7 @@ angular.module('MadProps')
   $stateProvider
     .state('about', {
       url: '/about',
-      templateUrl: '/client/about.html'
+      templateUrl: 'about.html'
     })
 })
 

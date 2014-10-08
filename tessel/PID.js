@@ -27,7 +27,7 @@ var PIDoutput = function(axis, currentError){
   var D = derivationConstant * deltaError / deltaTime;
 
   if(P > 0 && P + I + D < 0){
-    console.log("Houston we have a problem :" P, I, D)
+    console.log("Houston we have a problem :", P, I, D);
   }
   return P + I + D;
 };

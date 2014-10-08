@@ -5,6 +5,6 @@ angular.module('MadProps')
     $stateProvider
       .state('team', {
         url: '/team',
-        templateUrl: '../client/team.html'
+        templateUrl: 'team.html'
       })
   })
