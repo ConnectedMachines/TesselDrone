@@ -1,13 +1,14 @@
 var mainControl = require('./mainControl.js');
-var whichAxisToStabilize = require('./stabilize.js').whichAxisToStabilize;
+var stabilize = require('./stabilize.js');
 
 var launch = function(){
   console.log('launch')
   setImmediate(function(){
-    whichAxisToStabilize('x');
+    console.log('setImmediate')
+    stabilize.whichAxisToStabilize('x');
   });
   setImmediate(function(){
-    whichAxisToStabilize('y');
+    stabilize.whichAxisToStabilize('y');
   });
 };
 
@@ -29,5 +30,6 @@ var checkIfReadyToLaunch = function(){
 };
 
 
-exports.checkIfReadyToLaunch = checkIfReadyToLaunch;
+exports.launch = launch;
 exports.readyToLaunch = readyToLaunch;
+exports.checkIfReadyToLaunch = checkIfReadyToLaunch;

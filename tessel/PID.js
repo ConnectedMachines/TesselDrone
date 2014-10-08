@@ -10,7 +10,6 @@ var PIDoutput = function(axis, currentError){
 
   console.log('∆Time: ' +deltaTime);
   console.log('∆Error: ' +deltaError);
-
   console.log('DERIV', derivationConstant)
 
   if(Math.abs(deltaTime) < 10000000){ //fix this - reason for this current condition is time will evaluate high the first call through
@@ -19,6 +18,7 @@ var PIDoutput = function(axis, currentError){
     console.log('integrationCorrection '+axis+': '+(integrationConstant * mainControl.sumError[axis]));
     console.log('deltaError / deltaTime'+axis+': '+deltaError / deltaTime);
   }
+
   mainControl.previousTime[axis] = time; //setting historical time marker for next time function is called;
   
   var P = proportionConstant * currentError;
