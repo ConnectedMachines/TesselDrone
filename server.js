@@ -13,7 +13,7 @@ var io = require('socket.io')(server);
 // ###############################
 var tesselConnected = false;
 var tesselPreflightComplete = false;
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 8080;
 
 // ###############################
 // EXPRESS CONFIGURATION
