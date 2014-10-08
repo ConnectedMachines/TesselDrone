@@ -1,5 +1,7 @@
-<material-content class="material-content-padding" ng-controller="cardController">
-  <material-button class="material-button-raised material-button-colored" layout="horizontal" layout-align="center center" ng-click="preflight()">Network Diagram</material-button>
+<material-content class="material-content-padding">
+  <div ng-morph-overlay="settings" ng-controller="cardController">
+    <material-button class="material-button-raised material-button-colored" layout="horizontal" layout-align="center center">Network Diagram</material-button>
+  </div>
   <div layout="horizontal" layout-align="space-between">
     <div layout="vertical">
       <h1 layout="vertical" layout-sm="horizontal" layout-align="center center">Front End</h1>
