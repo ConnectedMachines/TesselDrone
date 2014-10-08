@@ -30,9 +30,11 @@ app.use(express.static(__dirname));
 var webSocketPort = 3000;
 var webSocketServer = ws.createServer(function (conn) {
   console.log("New connection");
+  tesselConnected = true;
   // When the client closes the connection, notify us.
   // This is where there should be clean up of listeners
   conn.on("close", function (code, reason) {
+    tesselConnected = false;
     console.log("Connection closed: ", code, reason);
   });
 }).listen(webSocketPort);
@@ -41,9 +43,11 @@ console.log('Listening on port', webSocketPort,'for Tessel...');
 
 var tesselToClientBridge = function (socket) {
   // When we get info back from the tessel websocket we want to let the client know
-  webSocketServer.on('text', function (data) {
-    console.log(data);
-    socket.emit('droneData', data);
+  webSocketServer.connections.forEach(function (conn) {
+    conn.on('text', function (data) {
+      console.log(data);
+      socket.emit('droneData', data);
+    });
   });
 };
 
@@ -54,26 +58,36 @@ var tesselToClientBridge = function (socket) {
 // Check to make sure that we have a connection before 
 // trying to send that connection data
 var tesselPreflight = function (callback) {
+  console.log('inside preflight');
   setTimeout(function(){
     if (tesselPreflightComplete) {
+  console.log('already ran');
       callback();
     } else if (tesselConnected) {
+  console.log('tesselConnected running');
       tesselPreflightComplete = true;
-      webSocketServer.connection.sendText('preflight');
+      webSocketServer.connections.forEach(function (conn) {
+        conn.sendText('preflight');
+      });
       callback();
     } else {
+  console.log('tessel not connected');
       tesselPreflight(callback);
     }
   }, 250);
 };
 
 var tesselTakeoff = function (callback) {
-  webSocketServer.connection.sendText('takeoff');
+  webSocketServer.connections.forEach(function (conn) {
+    conn.sendText('takeoff');
+  });
   callback();
 };
 
 var tesselLand = function (callback) {
-  webSocketServer.connection.sendText('land');
+  webSocketServer.connections.forEach(function (conn) {
+    conn.sendText('land');
+  });
   callback();
 };
 
@@ -92,6 +106,7 @@ io.on('connection', function (socket) {
     });
   });
   socket.on('preflight', function (data) {
+    console.log(data);
     tesselPreflight(function () {
       socket.emit('status', { status: 'Preflight Command Recieved' });
     });
