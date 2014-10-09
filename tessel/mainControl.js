@@ -1,5 +1,5 @@
 var tessel = require('tessel');
-var accel = require('accel-mma84').use(tessel.port['D'])
+var accel = require('accel-mma84').use(tessel.port['C'])
 var servo = require('servo-pca9685').use(tessel.port['A']);
 
 // ###############################
@@ -13,8 +13,8 @@ var servo = require('servo-pca9685').use(tessel.port['A']);
 // increment forward to by 0.01 to 0.04 and then hover
 
 var motorMaxThrottle = 0.06; 
-var throttleIncrement = 0.0005;
-var maxThrottleDifference = 0.004;
+var throttleIncrement = 0.003;
+var maxThrottleDifference = 0.006;
 
 // Sensor Calibrations
 var accelData = null;
@@ -32,33 +32,14 @@ var userReady = false;
 var proportionConstant = 0.005; //?
 var integrationConstant = 0.00025; //? Mike thinks it should be negative.
 var derivationConstant = 0.001; //?
-var targetBalance = 0.009;
+var targetBalance = 0.12;
 
 // Log data to console to monitor motor speed/average speed/accelerometer reads
 var colorGreen = '\033[92m';
 var checkMark = '\u2714';
 var colorRed = '\033[91m';
 var colorWhite = '' //'\033[97m';
-var lobot = {
-  x: {
-    error: undefined,
-    dError: undefined,
-    dTime: undefined,
-    P: undefined,
-    I: undefined,
-    D: undefined,
-    correction: undefined
-  },
-  y: {
-    error: undefined,
-    dError: undefined,
-    dTime: undefined,
-    P: undefined,
-    I: undefined,
-    D: undefined,
-    correction: undefined
-  }
-};
+
 var showStaticLog = function(){
   process.stdout.write('\u001B[2J\u001B[0;0f'
     +'Motors:\n'
@@ -84,6 +65,28 @@ var showStaticLog = function(){
     +'  D: '+lobot.y.D+'\n'
     +'  PID: '+lobot.y.correction+'\n'
   );
+};
+
+var lobot = {
+  x: {
+    error: undefined,
+    dError: undefined,
+    dTime: undefined,
+    P: undefined,
+    I: undefined,
+    D: undefined,
+    correction: undefined
+  },
+  y: {
+    error: undefined,
+    dError: undefined,
+    dTime: undefined,
+    P: undefined,
+    I: undefined,
+    D: undefined,
+    correction: undefined
+  },
+  speak: showStaticLog
 };
 
 // Motor calibrations
@@ -198,6 +201,8 @@ function setThrottle(throttle, axis){
   axisChanging[axis] = false;
 };
 
+
+exports.throttleIncrement = throttleIncrement;
 exports.lobot = lobot; // Logging god object; resides on Cloud City.
 exports.servo = servo;
 exports.accel = accel;
