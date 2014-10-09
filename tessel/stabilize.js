@@ -3,56 +3,6 @@ var throttleIncrement = mainControl.throttleIncrement;
 var motorMaxThrottle = mainControl.motorMaxThrottle;
 var PIDoutput = require('./PID.js').PIDoutput;
 
-
-/**************************************
-ACCELEROMETER FIX
-
-
-var preflightAccelDataCollection = [];
-
-var calculateAverages = function(accelArray){
-  var x = 0;
-  var y = 0;
-  var z = 0;
-  for(var i = 0; i< accelArray.length; i++){
-    x += accelArray[i][0];
-    y += accelArray[i][1];
-    z += accelArray[i][2];
-  }
-  
-  var accelerometer = {
-    x: x/accelArray.length,
-    y: y/accelArray.length,
-    z: z/accelArray.length
-  }
-
-  console.log(accelerometer);
-
-  return accelerometer;
-}
-
-var acceleratorOffsets;
-
-accel.on('data', function(xyz){
-  console.log(xyz)
-  if(preflightAccelDataCollection.length < 50){
-    preflightAccelDataCollection.push(xyz);
-    if(preflightAccelDataCollection.length === 50){
-      acceleratorOffsets = calculateAverages(preflightAccelDataCollection);
-    }
-  }
-});
-
-
-
-******************************************/
-
-
-
-
-
-
-
 var stabilize = function(posMotor, negMotor, axis){
   var currentError = mainControl.error[axis];
   console.log('current error ', currentError, axis);

@@ -22,9 +22,6 @@ var accelMaxGs = mainControl.accelMaxGs;
     });
   });
 
-
-  
-
   var checkModules = function(){
     setImmediate(function(){
       if(mainControl.isAccelModuleReady && mainControl.isServoModuleReady){ 
