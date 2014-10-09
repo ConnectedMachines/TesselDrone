@@ -1,6 +1,7 @@
 var tessel = require('tessel');
-var accel = require('accel-mma84').use(tessel.port['D']);
+var accel = require('accel-mma84').use(tessel.port['D'])
 var servo = require('servo-pca9685').use(tessel.port['A']);
+
 
 // ###############################
 // SETTINGS
@@ -13,8 +14,8 @@ var servo = require('servo-pca9685').use(tessel.port['A']);
 // increment forward to by 0.01 to 0.04 and then hover
 
 var motorMaxThrottle = 0.06; 
-var throttleIncrement = 0.001;
-var maxThrottleDifference = 0.005;
+var throttleIncrement = 0.0005;
+var maxThrottleDifference = 0.004;
 
 // Sensor Calibrations
 var accelData = null;
@@ -32,7 +33,7 @@ var userReady = false;
 var proportionConstant = 0.005; //?
 var integrationConstant = 0.00025; //? Mike thinks it should be negative.
 var derivationConstant = 0.001; //?
-var targetBalance = 0.006;
+var targetBalance = 0.009;
 
 // Log data to console to monitor motor speed/average speed/accelerometer reads
 var colorGreen = '\033[92m';
@@ -96,12 +97,45 @@ var sumError = {
   z: 0
 };
 
+var preflightAccelDataCollection = [];
+
+var calculateAverages = function(accelArray){
+  var x = 0;
+  var y = 0;
+  var z = 0;
+  for(var i = 0; i< accelArray.length; i++){
+    x += accelArray[i][0];
+    y += accelArray[i][1];
+    z += accelArray[i][2];
+  }
+  
+  var accelerometer = {
+    x: x/accelArray.length,
+    y: y/accelArray.length,
+    z: z/accelArray.length
+  }
+
+  console.log(accelerometer);
+
+  return accelerometer;
+}
+
+var accelerometerOffsets;
+
 accel.on('data', function(xyz){
+  if(preflightAccelDataCollection.length < 50){
+    preflightAccelDataCollection.push(xyz);
+    if(preflightAccelDataCollection.length === 50){
+      acceleratorOffsets = calculateAverages(preflightAccelDataCollection);
+    }
+  }
+
+  error['x'] = Math.abs(xyz[0] - accelerometerOffsets['x']) < targetBalance ?  0 : xyz[0] - accelerometerOffsets['x'];
+  error['y'] = Math.abs(xyz[1] - accelerometerOffsets['y']) < targetBalance ?  0 : xyz[1] - accelerometerOffsets['y'];
+  error['z'] = Math.abs(xyz[2] - accelerometerOffsets['z']) < targetBalance ?  0 : xyz[2] - accelerometerOffsets['z'];
   accelData = xyz;
-  error['x'] = Math.abs(xyz[0]) < targetBalance ?  0 : xyz[0];
-  error['y'] = Math.abs(xyz[1]) < targetBalance ?  0 : xyz[1];
-  error['z'] = Math.abs(xyz[2]) < targetBalance ?  0 : xyz[2];
 });
+
 
 
 // e.g. exports.motors[1].setThrottle(.2, 'x');
@@ -149,6 +183,7 @@ function setThrottle(throttle, axis){
 
 exports.servo = servo;
 exports.accel = accel;
+exports.targetBalance = targetBalance
 // exports.exports.motors = exports.motors;
 exports.axisChanging = axisChanging;
 exports.error = error;
@@ -165,4 +200,3 @@ exports.accelData = accelData;
 exports.proportionConstant = proportionConstant  
 exports.integrationConstant = integrationConstant 
 exports.derivationConstant = derivationConstant
-exports.targetBalance = targetBala

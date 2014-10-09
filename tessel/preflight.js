@@ -5,7 +5,7 @@ var servo = mainControl.servo;
 var accelReadsPerSecond = mainControl.accelReadsPerSecond;
 var accelMaxGs = mainControl.accelMaxGs;
 
-var startPreflight = function(){
+// var startPreflight = function(){
   console.log('Pre-flight checklist:')
   console.log(' 1.Calibrating modules:')
   servo.on('ready', function(){
@@ -21,6 +21,9 @@ var startPreflight = function(){
       });
     });
   });
+
+
+  
 
   var checkModules = function(){
     setImmediate(function(){
@@ -56,6 +59,6 @@ var startPreflight = function(){
   };
   checkIfReadyToLaunch();
   checkModules();
-};
+// };
 
 exports.startPreflight = startPreflight;
