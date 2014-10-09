@@ -2,9 +2,7 @@ var mainControl = require('./mainControl.js');
 var stabilize = require('./stabilize.js');
 
 var launch = function(){
-  console.log('launch')
   setImmediate(function(){
-    console.log('setImmediate')
     stabilize.whichAxisToStabilize('x');
   });
   setImmediate(function(){
@@ -20,7 +18,7 @@ var checkIfReadyToLaunch = function(){
   setImmediate(function(){
     if(mainControl.userReady){
       console.log('user ready')
-      setTimeout(function(){
+      setTimeout(function(){ //to give delay after hitting 'launch' in stdin;
         launch();
       }, 500);
     } else {

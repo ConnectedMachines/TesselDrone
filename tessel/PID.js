@@ -6,11 +6,10 @@ var derivationConstant = mainControl.derivationConstant;
 var PIDoutput = function(axis, currentError){
   var deltaError = currentError - mainControl.previousError[axis];
   var time = Date.now();
-  var deltaTime = (time - mainControl.previousTime[axis])/1000;
+  var deltaTime = (time - mainControl.previousTime[axis])/1000; //TODO: add /1000 into constant
 
   console.log('∆Time: ' +deltaTime);
   console.log('∆Error: ' +deltaError);
-  console.log('DERIV', derivationConstant)
 
   if(Math.abs(deltaTime) < 10000000){ //fix this - reason for this current condition is time will evaluate high the first call through
     mainControl.sumError[axis] += currentError * deltaTime;
@@ -25,10 +24,11 @@ var PIDoutput = function(axis, currentError){
   var I = integrationConstant * mainControl.sumError[axis];
   var D = derivationConstant * deltaError / deltaTime;
 
-  if(P > 0 && P + I + D < 0){
-    console.log("Houston we have a problem :", P, I, D);
+  if((P > 0 && P + I + D < 0) || (P < 0 && P + I + D > 0)){ // to filter the offchance that the correction needed to be positive but the I and D turn it negative
+    return 0;
+  } else {
+    return P + I + D; 
   }
-  return P + I + D;
 };
 
 exports.PIDoutput = PIDoutput;
