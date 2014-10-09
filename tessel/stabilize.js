@@ -5,19 +5,22 @@ var PIDoutput = require('./PID.js').PIDoutput;
 
 var stabilize = function(posMotor, negMotor, axis){
   var currentError = mainControl.error[axis];
-  console.log('current error ', currentError);
-  console.log('PID OUTPUT ', PIDoutput(axis, currentError))
+  console.log('current error ', currentError, axis);
   var correction = PIDoutput(axis, currentError)/2;
+  console.log('PID Output / 2 ', correction)
   if(correction !== 0){  
     mainControl.motors[posMotor].setThrottle(mainControl.motors[posMotor].currentThrottle + (-1 * correction), axis);
     mainControl.motors[negMotor].setThrottle(mainControl.motors[negMotor].currentThrottle + correction, axis);
+  } else {
+    console.log("correction is zero? ", correction);
+    mainControl.axisChanging[axis] = false;
   }
   mainControl.previousError[axis] = currentError;
 };
 
 var whichAxisToStabilize = function(axis){
   var whichMotorsToStabilize = function(posMotor, negMotor, accelReading){
-    if(!mainControl.axisChanging[axis] && (mainControl.error[axis] > 0 || mainControl.error[axis] < 0)){
+    if(!mainControl.axisChanging[axis] && (mainControl.error[axis] > mainControl.targetBalance || mainControl.error[axis] < -1 * mainControl.targetBalance)){ //Check flag for axis changing - potentially where code is stopping
       mainControl.axisChanging[axis] = true;
       stabilize(posMotor, negMotor, axis);
     } 
@@ -33,9 +36,9 @@ var whichAxisToStabilize = function(axis){
   };
   if(!mainControl.isLanding){
     if(axis === 'x'){
-      whichMotorsToStabilize(1,2, mainControl.error[axis]);
+      whichMotorsToStabilize(1, 2, mainControl.error[axis]);
     } else if (axis === 'y'){
-      whichMotorsToStabilize(4,3, mainControl.error[axis]);
+      whichMotorsToStabilize(4, 3, mainControl.error[axis]);
     }
   }
 };
