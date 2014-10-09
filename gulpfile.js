@@ -38,7 +38,7 @@ gulp.task('mocha', function(){
       , {cwd:'tessel'}));
 });
 
-gulp.task('coveralls', ['mocha', 'karma'], function(){
+gulp.task('coveralls', ['mocha', 'karma'], function(){ // Note: mocha and karma are dependency tasks.
   // Send results of istanbul's test coverage to coveralls.io.
   return gulp.src('', {read: false}) // You have to give it a file, but you don't have to read it.
     .pipe(shell('node_modules/.bin/istanbul report --lcov')) // generate lcov report from istanbul json
