@@ -111,273 +111,26 @@ angular.module('MadProps')
           var prop4 = null;
           
           {// load all assets async
-            // var _frameLoaded = false;
-            // var _engineTemplateL_motorLoaded = false;
-            // var _engineTemplateL_propLoaded = false;
-            // var _engineTemplateR_motorLoaded = false;
-            // var _engineTemplateR_propLoaded = false;
 
-            var _body_main = false;
-            var _body_posts = false;
-            var _prop_left = false;
-            var _prop_right = false;
-            var _motor = false;
-            var _tesselBoard_board = false;
-            var _tesselBoard_deco = false;
-            var _servo_board = false;
-            var _servo_deco = false;
-            var _servo_pins = false;
-            var _esc_board = false;
-            var _esc_deco1 = false;
-            var _esc_deco2 = false;
-            var _esc_deco3 = false;
-            var _powerswitch_body = false;
-            var _powerswitch_switch = false;
-            var _powerswitch_teeth = false;
-            
-            var loadProgress = {};
-
-            /****************************
-            body loaded flag
-            ****************************/
-            Object.defineProperty(loadProgress, 'body_main', {
-              enumerable: true,
-              get: function(){
-                return _body_main;
-              },
-              set: function(value){
-                _body_main = value;
-                if(checkProgress()){
-                  loadComplete();
-                }
-              }
-            });
-
-            Object.defineProperty(loadProgress, 'body_posts', {
-              enumerable: true,
-              get: function(){
-                return _body_posts;
-              },
-              set: function(value){
-                _body_posts = value;
-                if(checkProgress()){
-                  loadComplete();
-                }
-              }
-            });
-
-            /****************************
-            prop loaded flag
-            ****************************/
-            Object.defineProperty(loadProgress, 'prop_left', {
-              enumerable: true,
-              get: function(){
-                return _prop_left;
-              },
-              set: function(value){
-                _prop_left = value;
-                if(checkProgress()){
-                  loadComplete();
-                }
-              }
-            });
-
-            Object.defineProperty(loadProgress, 'prop_right', {
-              enumerable: true,
-              get: function(){
-                return _prop_right;
-              },
-              set: function(value){
-                _prop_right = value;
-                if(checkProgress()){
-                  loadComplete();
-                }
-              }
-            });
-
-            /****************************
-            motor loaded flag
-            ****************************/
-            Object.defineProperty(loadProgress, 'motor', {
-              enumerable: true,
-              get: function(){
-                return _motor;
-              },
-              set: function(value){
-                _motor = value;
-                if(checkProgress()){
-                  loadComplete();
-                }
-              }
-            });
-
-            /****************************
-            tesselBoard loaded flag
-            ****************************/
-            Object.defineProperty(loadProgress, 'tesselBoard_board', {
-              enumerable: true,
-              get: function(){
-                return _tesselBoard_board;
-              },
-              set: function(value){
-                _tesselBoard_board = value;
-                if(checkProgress()){
-                  loadComplete();
-                }
-              }
-            });
-
-            Object.defineProperty(loadProgress, 'tesselBoard_deco', {
-              enumerable: true,
-              get: function(){
-                return _tesselBoard_deco;
-              },
-              set: function(value){
-                _tesselBoard_deco = value;
-                if(checkProgress()){
-                  loadComplete();
-                }
-              }
-            });
-
-            /****************************
-            servo loaded flag
-            ****************************/
-            Object.defineProperty(loadProgress, 'servo_board', {
-              enumerable: true,
-              get: function(){
-                return _servo_board;
-              },
-              set: function(value){
-                _servo_board = value;
-                if(checkProgress()){
-                  loadComplete();
-                }
-              }
-            });
-
-            Object.defineProperty(loadProgress, 'servo_deco', {
-              enumerable: true,
-              get: function(){
-                return _servo_deco;
-              },
-              set: function(value){
-                _servo_deco = value;
-                if(checkProgress()){
-                  loadComplete();
-                }
-              }
-            });
-
-            Object.defineProperty(loadProgress, 'servo_pins', {
-              enumerable: true,
-              get: function(){
-                return _servo_pins;
-              },
-              set: function(value){
-                _servo_pins = value;
-                if(checkProgress()){
-                  loadComplete();
-                }
-              }
-            });
-
-            /****************************
-            esc loaded flag
-            ****************************/
-            Object.defineProperty(loadProgress, 'esc_board', {
-              enumerable: true,
-              get: function(){
-                return _esc_board;
-              },
-              set: function(value){
-                _esc_board = value;
-                if(checkProgress()){
-                  loadComplete();
-                }
-              }
-            });
-
-            Object.defineProperty(loadProgress, 'esc_deco1', {
-              enumerable: true,
-              get: function(){
-                return _esc_deco1;
-              },
-              set: function(value){
-                _esc_deco1 = value;
-                if(checkProgress()){
-                  loadComplete();
-                }
-              }
-            });
-
-            Object.defineProperty(loadProgress, 'esc_deco2', {
-              enumerable: true,
-              get: function(){
-                return _esc_deco2;
-              },
-              set: function(value){
-                _esc_deco2 = value;
-                if(checkProgress()){
-                  loadComplete();
-                }
-              }
-            });
-
-            Object.defineProperty(loadProgress, 'esc_deco3', {
-              enumerable: true,
-              get: function(){
-                return _esc_deco3;
-              },
-              set: function(value){
-                _esc_deco3 = value;
-                if(checkProgress()){
-                  loadComplete();
-                }
-              }
-            });
-
-            /****************************
-            powerswitch loaded flag
-            ****************************/
-            Object.defineProperty(loadProgress, 'powerswitch_body', {
-              enumerable: true,
-              get: function(){
-                return _powerswitch_body;
-              },
-              set: function(value){
-                _powerswitch_body = value;
-                if(checkProgress()){
-                  loadComplete();
-                }
-              }
-            });
-
-            Object.defineProperty(loadProgress, 'powerswitch_switch', {
-              enumerable: true,
-              get: function(){
-                return _powerswitch_switch;
-              },
-              set: function(value){
-                _powerswitch_switch = value;
-                if(checkProgress()){
-                  loadComplete();
-                }
-              }
-            });
-
-            Object.defineProperty(loadProgress, 'powerswitch_teeth', {
-              enumerable: true,
-              get: function(){
-                return _powerswitch_teeth;
-              },
-              set: function(value){
-                _powerswitch_teeth = value;
-                if(checkProgress()){
-                  loadComplete();
-                }
-              }
-            });
+            var loadProgress = {
+              body_main: false,
+              body_posts: false,
+              prop_left: false,
+              prop_right: false,
+              motor: false,
+              tesselBoard_board: false,
+              tesselBoard_deco: false,
+              servo_board: false,
+              servo_deco: false,
+              servo_pins: false,
+              esc_board: false,
+              esc_deco1: false,
+              esc_deco2: false,
+              esc_deco3: false,
+              powerswitch_body: false,
+              powerswitch_switch: false,
+              powerswitch_teeth: false
+            };
 
             // check if all loaded flags are true
             var checkProgress = function(){
@@ -407,6 +160,9 @@ angular.module('MadProps')
               ]
             }, function(){
               loadProgress.body_main = true;
+              if(checkProgress()){
+                loadComplete();
+              }
             });
             // load posts
             assetLoader(body, {
@@ -421,6 +177,9 @@ angular.module('MadProps')
               ]
             }, function(){
               loadProgress.body_posts = true;
+              if(checkProgress()){
+                loadComplete();
+              }
             });
 
           //////////////////////////////////////////////////////
@@ -445,6 +204,9 @@ angular.module('MadProps')
               counterClockwiseMotor.add(_motorTEMP.children[0].clone());
               _motorTEMP = null;
               loadProgress.motor = true;
+              if(checkProgress()){
+                loadComplete();
+              }
             });
             // load left propeller
             assetLoader(_propellerLeftTEMP, {
@@ -461,6 +223,9 @@ angular.module('MadProps')
               clockwiseMotor.add(_propellerLeftTEMP.children[0].clone());
               _propellerLeftTEMP
               loadProgress.prop_left = true;
+              if(checkProgress()){
+                loadComplete();
+              }
             });
             // load left propeller
             assetLoader(_propellerRightTEMP, {
@@ -477,6 +242,9 @@ angular.module('MadProps')
               counterClockwiseMotor.add(_propellerRightTEMP.children[0].clone());
               _propellerRightTEMP = null;
               loadProgress.prop_right = true;
+              if(checkProgress()){
+                loadComplete();
+              }
             });
 
           //////////////////////////////////////////////////////
@@ -494,6 +262,9 @@ angular.module('MadProps')
               ]
             }, function(){
               loadProgress.tesselBoard_board = true;
+              if(checkProgress()){
+                loadComplete();
+              }
             });
             // load decorations
             assetLoader(tesselBoard, {
@@ -508,6 +279,9 @@ angular.module('MadProps')
               ]
             }, function(){
               loadProgress.tesselBoard_deco = true;
+              if(checkProgress()){
+                loadComplete();
+              }
             });
           
           //////////////////////////////////////////////////////
@@ -525,6 +299,9 @@ angular.module('MadProps')
               ]
             }, function(){
               loadProgress.servo_board = true;
+              if(checkProgress()){
+                loadComplete();
+              }
             });
             // load decorations
             assetLoader(servo, {
@@ -539,6 +316,9 @@ angular.module('MadProps')
               ]
             }, function(){
               loadProgress.servo_deco = true;
+              if(checkProgress()){
+                loadComplete();
+              }
             });
             // load pins
             assetLoader(servo, {
@@ -553,6 +333,9 @@ angular.module('MadProps')
               ]
             }, function(){
               loadProgress.servo_pins = true;
+              if(checkProgress()){
+                loadComplete();
+              }
             });
 
           //////////////////////////////////////////////////////
@@ -570,6 +353,9 @@ angular.module('MadProps')
               ]
             }, function(){
               loadProgress.powerswitch_body = true;
+              if(checkProgress()){
+                loadComplete();
+              }
             });
             // load teeth
             assetLoader(powerswitch, {
@@ -584,6 +370,9 @@ angular.module('MadProps')
               ]
             }, function(){
               loadProgress.powerswitch_teeth = true;
+              if(checkProgress()){
+                loadComplete();
+              }
             });
             // load switch
             assetLoader(powerswitch, {
@@ -608,6 +397,9 @@ angular.module('MadProps')
                 })()
               );
               loadProgress.powerswitch_switch = true;
+              if(checkProgress()){
+                loadComplete();
+              }
             });
 
             //////////////////////////////////////////////////////
@@ -625,6 +417,9 @@ angular.module('MadProps')
               ]
             }, function(){
               loadProgress.esc_board = true;
+              if(checkProgress()){
+                loadComplete();
+              }
             });
             // load deco1
             assetLoader(esc, {
@@ -639,6 +434,9 @@ angular.module('MadProps')
               ]
             }, function(){
               loadProgress.esc_deco1 = true;
+              if(checkProgress()){
+                loadComplete();
+              }
             });
             // load deco2
             assetLoader(esc, {
@@ -653,6 +451,9 @@ angular.module('MadProps')
               ]
             }, function(){
               loadProgress.esc_deco2 = true;
+              if(checkProgress()){
+                loadComplete();
+              }
             });
             // load deco3
             assetLoader(esc, {
@@ -667,6 +468,9 @@ angular.module('MadProps')
               ]
             }, function(){
               loadProgress.esc_deco3 = true;
+              if(checkProgress()){
+                loadComplete();
+              }
             });
 
           //////////////////////////////////////////////////////
@@ -729,27 +533,11 @@ angular.module('MadProps')
         }/************ 3D Workspace lower edge ******************/
 
         // helper functions for easing between attitude changes
-
-        var _inOutQuad = function(t, b, c, d){
-          t /= d/2;
-          if(t < 1){
-            return c/2*t*t + b;
-          }
-          t--;
-          return -c/2 * (t*(t-2) - 1) + b;
-        };
-
-        var _inOutLinear = function (t, b, c, d) {
-          return c*t/d + b;
-        };
-
-        var easeMovement = function(b, c, d){
+        var easeMovement = function(start, stop, frames){
           var results = [];
-          for(var t = 0; t < d; t++){
-            results.push(_inOutLinear(t, b, c, d));
+          for(var t = 1; t <= frames; t++){
+            results.push( start + t*(stop-start)/(frames) );
           }
-          results.shift();
-          results.push(c);
           return results
         };
 
@@ -759,25 +547,24 @@ angular.module('MadProps')
             requestAnimationFrame(render);
           }
 
-          // //DELETE ME!!!!!!
-          // if(drone){
-          //   drone.rotation.x += 0.01;
-          //   drone.rotation.y += 0.01;
-          // }
-
           //set attitude of drone
           if(drone && scope.attitude){
             var newPitch = Math.round(scope.attitude.pitch*(180/Math.PI));
             var newRoll = Math.round(scope.attitude.roll*(180/Math.PI));
 
-            // check for diff in attitude
+            // check for diff in pitch attitude
             if(newPitch !== currPitch){
-              pitchArr = easeMovement(currPitch, newPitch, 25);
-              currPitch = newPitch;
+              if( (newPitch < 30 && newPitch > -30) && (Math.abs(newPitch-currPitch) > 1) ){
+                pitchArr = pitchArr.concat( easeMovement(currPitch, newPitch, 10) );
+                currPitch = newPitch;
+              }
             }
+            // check for diff in roll attitude
             if(newRoll !== currRoll){
-              rollArr = easeMovement(currRoll, newRoll, 25);
-              currRoll = newRoll;
+              if( (newRoll < 30 && newRoll > -30) && (Math.abs(newRoll-currRoll) > 1) ){
+                rollArr = rollArr.concat( easeMovement(currRoll, newRoll, 10) );
+                currRoll = newRoll;
+              }
             }
 
             // apply attitude adjustments if available
