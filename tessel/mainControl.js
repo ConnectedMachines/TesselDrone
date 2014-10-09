@@ -2,7 +2,6 @@ var tessel = require('tessel');
 var accel = require('accel-mma84').use(tessel.port['D'])
 var servo = require('servo-pca9685').use(tessel.port['A']);
 
-
 // ###############################
 // SETTINGS
 // ###############################
@@ -40,17 +39,50 @@ var colorGreen = '\033[92m';
 var checkMark = '\u2714';
 var colorRed = '\033[91m';
 var colorWhite = '' //'\033[97m';
-var staticLog = function(motor1, motor2, motor3, motor4){
-  console.log('static log writing')
+var lobot = {
+  x: {
+    error: undefined,
+    dError: undefined,
+    dTime: undefined,
+    P: undefined,
+    I: undefined,
+    D: undefined,
+    correction: undefined
+  },
+  y: {
+    error: undefined,
+    dError: undefined,
+    dTime: undefined,
+    P: undefined,
+    I: undefined,
+    D: undefined,
+    correction: undefined
+  }
+};
+var showStaticLog = function(){
   process.stdout.write('\u001B[2J\u001B[0;0f'
-    +'Motor throttles:\n'
-    +'1: '+motor1.toFixed(3)+'\n'
-    +'2: '+motor2.toFixed(3)+'\n'
-    +'3: '+motor3.toFixed(3)+'\n'
-    +'4: '+motor4.toFixed(3)+'\n'
-    +'A: '+((motor1+motor2+motor3+motor4)/4).toFixed(3)+'\n'
-    +'X: '+accelData[0]+'\n'
-    +'Y: '+accelData[1]
+    +'Motors:\n'
+    +'  1+x: '+motors[1].currentThrottle.toFixed(3)+'\n'
+    +'  2-x: '+motors[2].currentThrottle.toFixed(3)+'\n'
+    +'  3-y: '+motors[3].currentThrottle.toFixed(3)+'\n'
+    +'  4+y: '+motors[4].currentThrottle.toFixed(3)+'\n'
+    +'  avg: '+((motors[1].currentThrottle+motors[2].currentThrottle+motors[3].currentThrottle+motors[4].currentThrottle)/4).toFixed(3)+'\n'
+    +'X:'+'\n'
+    +'  error: '+lobot.x.error+'\n'
+    +'  ∆error: '+lobot.x.dError+'\n'
+    +'  ∆time: '+lobot.x.dTime+'\n'
+    +'  P: '+lobot.x.P+'\n'
+    +'  I: '+lobot.x.I+'\n'
+    +'  D: '+lobot.x.D+'\n'
+    +'  PID: '+lobot.x.correction+'\n'
+    +'Y:'+'\n'
+    +'  error: '+lobot.y.error+'\n'
+    +'  ∆error: '+lobot.y.dError+'\n'
+    +'  ∆time: '+lobot.y.dTime+'\n'
+    +'  P: '+lobot.y.P+'\n'
+    +'  I: '+lobot.y.I+'\n'
+    +'  D: '+lobot.y.D+'\n'
+    +'  PID: '+lobot.y.correction+'\n'
   );
 };
 
@@ -61,7 +93,7 @@ var Motor = function(motorNumber){
   this.setThrottle = setThrottle
 }
 
-exports.motors = {
+var motors = {
   1: new Motor(1),
   2: new Motor(2),
   3: new Motor(3),
@@ -115,18 +147,18 @@ var calculateAverages = function(accelArray){
     z: z/accelArray.length
   }
 
-  console.log(accelerometer);
+  console.log('acceleratorOffsets:', accelerometer);
 
   return accelerometer;
 }
 
-var accelerometerOffsets;
+var accelerometerOffsets = {};
 
 accel.on('data', function(xyz){
   if(preflightAccelDataCollection.length < 50){
     preflightAccelDataCollection.push(xyz);
     if(preflightAccelDataCollection.length === 50){
-      acceleratorOffsets = calculateAverages(preflightAccelDataCollection);
+      accelerometerOffsets = calculateAverages(preflightAccelDataCollection);
     }
   }
 
@@ -138,40 +170,26 @@ accel.on('data', function(xyz){
 
 
 
-// e.g. exports.motors[1].setThrottle(.2, 'x');
+// e.g. motors[1].setThrottle(.2, 'x');
 function setThrottle(throttle, axis){
-  console.log('throttle ',throttle);
-  console.log('errorX ',error['x']);
-  console.log('errorY ',error['y']);
-  console.log('errorZ ',error['y']);
+  // console.log('throttle ',throttle);
+  // console.log('errorX ',error['x']);
+  // console.log('errorY ',error['y']);
+  // console.log('errorZ ',error['y']);
   var motor = this;
   var previousThrottle = motor.currentThrottle;
-  var averageThrottle = ((exports.motors[1].currentThrottle + exports.motors[2].currentThrottle + exports.motors[3].currentThrottle + exports.motors[4].currentThrottle)/4)
+  var averageThrottle = ((motors[1].currentThrottle + motors[2].currentThrottle + motors[3].currentThrottle + motors[4].currentThrottle)/4)
   motor.currentThrottle = throttle;
-  if(Math.max(exports.motors[1].currentThrottle, exports.motors[2].currentThrottle, exports.motors[3].currentThrottle, exports.motors[4].currentThrottle) - Math.min(exports.motors[1].currentThrottle, exports.motors[2].currentThrottle, exports.motors[3].currentThrottle, exports.motors[4].currentThrottle) <= maxThrottleDifference){
+  if(Math.max(motors[1].currentThrottle, motors[2].currentThrottle, motors[3].currentThrottle, motors[4].currentThrottle) - Math.min(motors[1].currentThrottle, motors[2].currentThrottle, motors[3].currentThrottle, motors[4].currentThrottle) <= maxThrottleDifference){
     servo.move(this.number, throttle, function(err){
       motor.currentThrottle = throttle;
-      console.log('1: '+exports.motors[1].currentThrottle.toFixed(3)); 
-      console.log('2: '+exports.motors[2].currentThrottle.toFixed(3)); 
-      console.log('3: '+exports.motors[3].currentThrottle.toFixed(3)); 
-      console.log('4: '+exports.motors[4].currentThrottle.toFixed(3));
-      console.log('A: '+((exports.motors[1].currentThrottle+exports.motors[2].currentThrottle+exports.motors[3].currentThrottle+exports.motors[4].currentThrottle)/4).toFixed(3));
-      console.log('X: '+accelData[0]);
-      console.log('Y: '+accelData[1]); 
-      // showStaticLog();
+      showStaticLog();
     });
   } else if(Math.abs(previousThrottle - averageThrottle) > Math.abs(motor.currentThrottle - averageThrottle)){
     console.log('outta bounds - moving towards average')
     servo.move(this.number, throttle, function(err){
       motor.currentThrottle = throttle;
-      console.log('1: '+exports.motors[1].currentThrottle.toFixed(3)); 
-      console.log('2: '+exports.motors[2].currentThrottle.toFixed(3)); 
-      console.log('3: '+exports.motors[3].currentThrottle.toFixed(3)); 
-      console.log('4: '+exports.motors[4].currentThrottle.toFixed(3));
-      console.log('A: '+((exports.motors[1].currentThrottle+exports.motors[2].currentThrottle+exports.motors[3].currentThrottle+exports.motors[4].currentThrottle)/4).toFixed(3));
-      console.log('X: '+accelData[0]);
-      console.log('Y: '+accelData[1]); 
-      // showStaticLog();
+      showStaticLog();
     })
   } else {
     console.log('Not valid throttle input.');
@@ -180,11 +198,11 @@ function setThrottle(throttle, axis){
   axisChanging[axis] = false;
 };
 
-
+exports.lobot = lobot; // Logging god object; resides on Cloud City.
 exports.servo = servo;
 exports.accel = accel;
+exports.motors = motors;
 exports.targetBalance = targetBalance
-// exports.exports.motors = exports.motors;
 exports.axisChanging = axisChanging;
 exports.error = error;
 exports.previousError = previousError;

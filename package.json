@@ -9,7 +9,7 @@
   "scripts": {
     "postinstall": "node_modules/.bin/bower install; cd tessel; npm install; cd ..; pwd;",
     "start": "node server.js",
-    "test": "cd tessel; istanbul cover _mocha --dir ../coverage/tessel --report json -- -u exports -R spec; cd ..; pwd; gulp karma; istanbul report --lcov; gulp coveralls;"
+    "test": "gulp test;"
   },
   "license": "MIT",
   "bugs": {
