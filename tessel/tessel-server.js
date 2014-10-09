@@ -15,47 +15,49 @@ var ws = require("nodejs-websocket");
 //This must match the web socket port on the server side
 var webSocketPort = 3000
 var connectToServer = function () {
-  var connection = ws.connect('wss://10.8.28.246' + webSocketPort, function () {
-    tesselConnected = true;
-    console.log('Connected to Tessel');
-  });
-  connection.on("text", function (str) {
-    // This will basicly be our control switch
-    if (str === 'land') {
-      console.log("Received " + str);
-      land();
-    } else if (str === 'takeOff') {
-      console.log("Received " + str);
-      readyToLaunch();
-      // This is temp code and will need to be rewritten such that 
-      // when the connectionection closes this on data is removed
-    } else if (str === 'preflight') {
-      console.log("Received " + str);
-      accel.on('data', function (xyz) {
-        console.log(xyz);
-        accelData.x = xyz[0];
-        accelData.y = xyz[1];
-        accelData.z = xyz[2];
-        var data = {
-          attitude: {
-            pitch: accelData.x,
-            roll: accelData.y,
-            yaw: accelData.z
-          },
-          motorThrottles: {
-            motor1: 0,
-            motor2: 0,
-            motor3: 0,
-            motor4: 0
-          }
-        };
+  if (!tesselConnected) {
+    console.log('Inside connect to server')
+    var connection = ws.connect('ws://tesseldrone.cloudapp.net:3000', function() {
+      // When we connect to the server, send some catchy text
+      tesselConnected = true;
+      console.log('Connected to Web Server');
+    });
+    connection.on("text", function (text) {
+      console.log("Echoed back from server:", text);
+      // This will basicly be our control switch
+      if (text === 'land') {
+        console.log("Received " + text);
+        land();
+      } else if (text === 'takeOff') {
+        console.log("Received " + text);
+        readyToLaunch();
+        // This is temp code and will need to be rewritten such that 
+        // when the connectionection closes this on data is removed
+      } else if (text === 'preflight') {
+        console.log("Received " + text);
+        accel.on('data', function (xyz) {
+          console.log(xyz);
+          var data = {
+            attitude: {
+              pitch: xyz[0],
+              roll: xyz[1],
+              yaw: xyz[2]
+            },
+            motorThrottles: {
+              motor1: 0,
+              motor2: 0,
+              motor3: 0,
+              motor4: 0
+            }
+          };
+          connection.sendText(JSON.stringify(data));
+        });
         startPreflight();
-        connection.sendText(JSON.stringify(data));
-      });
-    } else {
-      console.log("Invalid Command: ", str);
-    }
-  });
+      } else {
+        console.log("Invalid Command: ", str);
+      }
+    });
+  }
 };
 // ###############################
 // WIFI SETUP
@@ -77,15 +79,17 @@ var connect = function () {
 
 // Check if the wifi chip is busy (currently trying to connect), if not, try to connect
 var tryConnect = function () {
-  if (!wifi.isBusy()) {
-    connect();
-  } else {
-    // For the first few seconds of program bootup, you'll always 
-    // see the wifi chip as being 'busy'
-    console.log('is busy, trying again');
-    setTimeout(function () {
-      tryConnect();
-    }, 1000);
+  if(!wifi.isConnected()){
+    if (!wifi.isBusy()) {
+      connect();
+    } else {
+      // For the first few seconds of program bootup, you'll always 
+      // see the wifi chip as being 'busy'
+      console.log('is busy, trying again');
+      setTimeout(function () {
+        tryConnect();
+      }, 1000);
+    }
   }
 };
 

@@ -1,4 +1,4 @@
-angular.module('MadProps', ['ngAnimate', 'ngMaterial', 'ui.router', 'THREE', 'd3', 'btford.socket-io', 'ngMorph'])
+angular.module('MadProps', ['ngAnimate', 'ngMaterial', 'ui.router', 'btford.socket-io', 'ngMorph'])
 
   .config(function($stateProvider, $urlRouterProvider){
     $urlRouterProvider.when('', '/');

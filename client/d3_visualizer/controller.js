@@ -1,5 +1,5 @@
 angular.module('MadProps')
-  .controller('D3visualizerController', ['$scope', '$window', function($scope, $window){
+  .controller('D3visualizerController', ['$scope', function($scope){
     // loop async until directive has finished executing
     var loop = function recurse(){
       if($scope.d3VisualizerIsLoaded){

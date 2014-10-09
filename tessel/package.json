@@ -10,8 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "accel-mma84": "^0.2.3",
-    "nodejs-websocket": "^1.0.0",
-    "servo-pca9685": "^0.1.3"
+    "accel-mma84": "*",
+    "nodejs-websocket": "*",
+    "servo-pca9685": "*"
   }
 }
