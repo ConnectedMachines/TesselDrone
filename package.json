@@ -49,6 +49,6 @@
   },
   "subdomain": "TesselDrone.azurewebsites.net",
   "engines": {
-    "node": "0.10.x"
+    "node": "*"
   }
 }
