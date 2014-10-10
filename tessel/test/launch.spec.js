@@ -10,13 +10,13 @@ var launchFile = proxyquireStrict.load('../launch.js', {
   './stabilize.js' : stabilizeStub
 });
 
-describe('The launch.js file', function(){
+describe('launch.js', function(){
   
   beforeEach(function(){
     mainControlStub.userReady = false;
   })
 
-  describe('launch', function(){
+  describe('launch()', function(){
 
     it('should be a function', function(){
       assert.typeOf(launchFile.launch, 'function', 'launch is a function');
@@ -24,7 +24,7 @@ describe('The launch.js file', function(){
 
   });
   
-  describe('readyToLaunch', function(){
+  describe('readyToLaunch()', function(){
     it('should be a function', function(){
       assert.typeOf(launchFile.readyToLaunch, 'function', 'readyToLaunch is a function');
     });
@@ -37,7 +37,7 @@ describe('The launch.js file', function(){
 
   });
   
-  describe('checkIfReadyToLaunch', function(){
+  describe('checkIfReadyToLaunch()', function(){
     it('should be a function', function(){
       assert.typeOf(launchFile.checkIfReadyToLaunch, 'function', 'checkIfReadyToLaunch is a function');
     });
