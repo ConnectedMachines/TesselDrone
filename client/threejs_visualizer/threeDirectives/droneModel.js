@@ -7,6 +7,7 @@ angular.module('MadProps')
         THREEjs setup 
         ************************************************************/
         var context = document.getElementsByTagName('dronemodel')[0];
+        var loadingBar = document.getElementsByTagName('material-linear-progress')[0];
         var width = height = 500;
         var scene = new THREE.Scene();
         var camera = new THREE.PerspectiveCamera(75, width/height, 0.1, 1000);
@@ -477,6 +478,7 @@ angular.module('MadProps')
 
           // to be run once all assets loaded
           var loadComplete = function(){
+            context.removeChild(loadingBar);
             _wrapper.add(body);
 
             _wrapper.add(// add the battery
