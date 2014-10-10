@@ -1,5 +1,5 @@
 var tessel = require('tessel');
-var accel = require('accel-mma84').use(tessel.port['D']);
+var accel = require('accel-mma84').use(tessel.port['C'])
 var servo = require('servo-pca9685').use(tessel.port['A']);
 
 // ###############################
@@ -13,8 +13,8 @@ var servo = require('servo-pca9685').use(tessel.port['A']);
 // increment forward to by 0.01 to 0.04 and then hover
 
 var motorMaxThrottle = 0.06; 
-var throttleIncrement = 0.001;
-var maxThrottleDifference = 0.005;
+var throttleIncrement = 0.003;
+var maxThrottleDifference = 0.006;
 
 // Sensor Calibrations
 var accelData = null;
@@ -32,25 +32,61 @@ var userReady = false;
 var proportionConstant = 0.005; //?
 var integrationConstant = 0.00025; //? Mike thinks it should be negative.
 var derivationConstant = 0.001; //?
-var targetBalance = 0.006;
+var targetBalance = 0.12;
 
 // Log data to console to monitor motor speed/average speed/accelerometer reads
 var colorGreen = '\033[92m';
 var checkMark = '\u2714';
 var colorRed = '\033[91m';
 var colorWhite = '' //'\033[97m';
-var staticLog = function(motor1, motor2, motor3, motor4){
-  console.log('static log writing')
+
+var showStaticLog = function(){
   process.stdout.write('\u001B[2J\u001B[0;0f'
-    +'Motor throttles:\n'
-    +'1: '+motor1.toFixed(3)+'\n'
-    +'2: '+motor2.toFixed(3)+'\n'
-    +'3: '+motor3.toFixed(3)+'\n'
-    +'4: '+motor4.toFixed(3)+'\n'
-    +'A: '+((motor1+motor2+motor3+motor4)/4).toFixed(3)+'\n'
-    +'X: '+accelData[0]+'\n'
-    +'Y: '+accelData[1]
+    +'Motors:\n'
+    +'  1+x: '+motors[1].currentThrottle.toFixed(3)+'\n'
+    +'  2-x: '+motors[2].currentThrottle.toFixed(3)+'\n'
+    +'  3-y: '+motors[3].currentThrottle.toFixed(3)+'\n'
+    +'  4+y: '+motors[4].currentThrottle.toFixed(3)+'\n'
+    +'  avg: '+((motors[1].currentThrottle+motors[2].currentThrottle+motors[3].currentThrottle+motors[4].currentThrottle)/4).toFixed(3)+'\n'
+    +'X:'+'\n'
+    +'  error: '+lobot.x.error+'\n'
+    +'  ∆error: '+lobot.x.dError+'\n'
+    +'  ∆time: '+lobot.x.dTime+'\n'
+    +'  P: '+lobot.x.P+'\n'
+    +'  I: '+lobot.x.I+'\n'
+    +'  D: '+lobot.x.D+'\n'
+    +'  PID: '+lobot.x.correction+'\n'
+    +'Y:'+'\n'
+    +'  error: '+lobot.y.error+'\n'
+    +'  ∆error: '+lobot.y.dError+'\n'
+    +'  ∆time: '+lobot.y.dTime+'\n'
+    +'  P: '+lobot.y.P+'\n'
+    +'  I: '+lobot.y.I+'\n'
+    +'  D: '+lobot.y.D+'\n'
+    +'  PID: '+lobot.y.correction+'\n'
   );
+};
+
+var lobot = {
+  x: {
+    error: undefined,
+    dError: undefined,
+    dTime: undefined,
+    P: undefined,
+    I: undefined,
+    D: undefined,
+    correction: undefined
+  },
+  y: {
+    error: undefined,
+    dError: undefined,
+    dTime: undefined,
+    P: undefined,
+    I: undefined,
+    D: undefined,
+    correction: undefined
+  },
+  speak: showStaticLog
 };
 
 // Motor calibrations
@@ -60,7 +96,7 @@ var Motor = function(motorNumber){
   this.setThrottle = setThrottle
 }
 
-exports.motors = {
+var motors = {
   1: new Motor(1),
   2: new Motor(2),
   3: new Motor(3),
@@ -96,48 +132,67 @@ var sumError = {
   z: 0
 };
 
+var preflightAccelDataCollection = [];
+
+var calculateAverages = function(accelArray){
+  var x = 0;
+  var y = 0;
+  var z = 0;
+  for(var i = 0; i< accelArray.length; i++){
+    x += accelArray[i][0];
+    y += accelArray[i][1];
+    z += accelArray[i][2];
+  }
+  
+  var accelerometer = {
+    x: x/accelArray.length,
+    y: y/accelArray.length,
+    z: z/accelArray.length
+  }
+
+  console.log('acceleratorOffsets:', accelerometer);
+
+  return accelerometer;
+}
+
+var accelerometerOffsets = {};
+
 accel.on('data', function(xyz){
+  if(preflightAccelDataCollection.length < 50){
+    preflightAccelDataCollection.push(xyz);
+    if(preflightAccelDataCollection.length === 50){
+      accelerometerOffsets = calculateAverages(preflightAccelDataCollection);
+    }
+  }
+
+  error['x'] = Math.abs(xyz[0] - accelerometerOffsets['x']) < targetBalance ?  0 : xyz[0] - accelerometerOffsets['x'];
+  error['y'] = Math.abs(xyz[1] - accelerometerOffsets['y']) < targetBalance ?  0 : xyz[1] - accelerometerOffsets['y'];
+  error['z'] = Math.abs(xyz[2] - accelerometerOffsets['z']) < targetBalance ?  0 : xyz[2] - accelerometerOffsets['z'];
   accelData = xyz;
-  error['x'] = Math.abs(xyz[0]) < targetBalance ?  0 : xyz[0];
-  error['y'] = Math.abs(xyz[1]) < targetBalance ?  0 : xyz[1];
-  error['z'] = Math.abs(xyz[2]) < targetBalance ?  0 : xyz[2];
 });
 
 
-// e.g. exports.motors[1].setThrottle(.2, 'x');
+
+// e.g. motors[1].setThrottle(.2, 'x');
 function setThrottle(throttle, axis){
-  console.log('throttle ',throttle);
-  console.log('errorX ',error['x']);
-  console.log('errorY ',error['y']);
-  console.log('errorZ ',error['y']);
+  // console.log('throttle ',throttle);
+  // console.log('errorX ',error['x']);
+  // console.log('errorY ',error['y']);
+  // console.log('errorZ ',error['y']);
   var motor = this;
   var previousThrottle = motor.currentThrottle;
-  var averageThrottle = ((exports.motors[1].currentThrottle + exports.motors[2].currentThrottle + exports.motors[3].currentThrottle + exports.motors[4].currentThrottle)/4)
+  var averageThrottle = ((motors[1].currentThrottle + motors[2].currentThrottle + motors[3].currentThrottle + motors[4].currentThrottle)/4)
   motor.currentThrottle = throttle;
-  if(Math.max(exports.motors[1].currentThrottle, exports.motors[2].currentThrottle, exports.motors[3].currentThrottle, exports.motors[4].currentThrottle) - Math.min(exports.motors[1].currentThrottle, exports.motors[2].currentThrottle, exports.motors[3].currentThrottle, exports.motors[4].currentThrottle) <= maxThrottleDifference){
+  if(Math.max(motors[1].currentThrottle, motors[2].currentThrottle, motors[3].currentThrottle, motors[4].currentThrottle) - Math.min(motors[1].currentThrottle, motors[2].currentThrottle, motors[3].currentThrottle, motors[4].currentThrottle) <= maxThrottleDifference){
     servo.move(this.number, throttle, function(err){
       motor.currentThrottle = throttle;
-      console.log('1: '+exports.motors[1].currentThrottle.toFixed(3)); 
-      console.log('2: '+exports.motors[2].currentThrottle.toFixed(3)); 
-      console.log('3: '+exports.motors[3].currentThrottle.toFixed(3)); 
-      console.log('4: '+exports.motors[4].currentThrottle.toFixed(3));
-      console.log('A: '+((exports.motors[1].currentThrottle+exports.motors[2].currentThrottle+exports.motors[3].currentThrottle+exports.motors[4].currentThrottle)/4).toFixed(3));
-      console.log('X: '+accelData[0]);
-      console.log('Y: '+accelData[1]); 
-      // showStaticLog();
+      showStaticLog();
     });
   } else if(Math.abs(previousThrottle - averageThrottle) > Math.abs(motor.currentThrottle - averageThrottle)){
     console.log('outta bounds - moving towards average')
     servo.move(this.number, throttle, function(err){
       motor.currentThrottle = throttle;
-      console.log('1: '+exports.motors[1].currentThrottle.toFixed(3)); 
-      console.log('2: '+exports.motors[2].currentThrottle.toFixed(3)); 
-      console.log('3: '+exports.motors[3].currentThrottle.toFixed(3)); 
-      console.log('4: '+exports.motors[4].currentThrottle.toFixed(3));
-      console.log('A: '+((exports.motors[1].currentThrottle+exports.motors[2].currentThrottle+exports.motors[3].currentThrottle+exports.motors[4].currentThrottle)/4).toFixed(3));
-      console.log('X: '+accelData[0]);
-      console.log('Y: '+accelData[1]); 
-      // showStaticLog();
+      showStaticLog();
     })
   } else {
     console.log('Not valid throttle input.');
@@ -147,9 +202,12 @@ function setThrottle(throttle, axis){
 };
 
 
+exports.throttleIncrement = throttleIncrement;
+exports.lobot = lobot; // Logging god object; resides on Cloud City.
 exports.servo = servo;
 exports.accel = accel;
-// exports.exports.motors = exports.motors;
+exports.motors = motors;
+exports.targetBalance = targetBalance
 exports.axisChanging = axisChanging;
 exports.error = error;
 exports.previousError = previousError;
@@ -165,4 +223,3 @@ exports.accelData = accelData;
 exports.proportionConstant = proportionConstant  
 exports.integrationConstant = integrationConstant 
 exports.derivationConstant = derivationConstant
-exports.targetBalance = targetBala

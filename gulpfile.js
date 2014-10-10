@@ -18,20 +18,35 @@ gulp.task('lint', function(){
     .pipe(jshint.reporter('jshint-stylish'));
 });
 
-gulp.task('test', ['karma', 'coveralls']);
+// *********
+// * TESTS *
+// *********
+gulp.task('test', ['karma', 'mocha', 'coveralls'])
+
 gulp.task('karma', function (done) {
   karma.start({
     // Import Karma with settings from karma.conf.js.
     configFile: __dirname + '/karma.conf.js'
     // Make Karma exit after tests finish.
   }, done);
+});
 
+// Test Tessel code with Mocha!
+gulp.task('mocha', function(){
+    return gulp.src('', {read:false})
+    .pipe(shell('../node_modules/.bin/istanbul cover ../node_modules/.bin/_mocha --dir ../coverage/tessel --report json -- -u exports -R spec'
+      , {cwd:'tessel'}));
 });
-gulp.task('coveralls', ['karma'], function(){ // 2nd arg is a dependency: 'karma' must be finished first.
+
+gulp.task('coveralls', ['mocha', 'karma'], function(){ // Note: mocha and karma are dependency tasks.
   // Send results of istanbul's test coverage to coveralls.io.
-  return gulp.src('gulpfile.js', {read: false}) // You have to give it a file, but you don't have to read it.
-    .pipe(shell('cat coverage/lcov.info | node_modules/coveralls/bin/coveralls.js'));
+  return gulp.src('', {read: false}) // You have to give it a file, but you don't have to read it.
+    .pipe(shell('node_modules/.bin/istanbul report --lcov')) // generate lcov report from istanbul json
+    .pipe(shell('cat coverage/lcov.info | node_modules/.bin/coveralls'));
 });
+// *************
+// * END TESTS *
+// *************
 
 // CSS from Stylus.js (minified & concated too!).
 gulp.task('css', function(){
@@ -51,5 +66,6 @@ gulp.task('tessel', function(){
       'tessel run <%= file.path %>'
       ], {cwd:'tessel'}));
 });
+
 // Check out how this uses paths: 
 // https://github.com/sun-zheng-an/gulp-shell/blob/master/gulpfile.js
