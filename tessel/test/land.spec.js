@@ -22,7 +22,7 @@ var Motor = function(number){
   };
 };
 
-describe('The land.js file', function(){
+describe('land.js', function(){
   
   beforeEach(function(){
     mainControlStub.isLanding = false;
@@ -33,8 +33,7 @@ describe('The land.js file', function(){
     mainControlStub.motors[4] = new Motor(1);
   })
 
-  describe('land', function(){
-
+  describe('land()', function(){
     it('should be a function', function(){
       assert.typeOf(landFile.land, 'function', 'land is a function');
     });
