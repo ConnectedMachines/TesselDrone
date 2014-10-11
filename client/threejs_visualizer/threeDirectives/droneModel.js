@@ -3,11 +3,23 @@ angular.module('MadProps')
     return {
       restrict: 'EA',
       link: function(scope, element, attrs){
+        //adjust loading bar height
+        var attr = document.createAttribute('style');
+        attr.value = 'height: 15px;';
+
+        var loadingBar = document.getElementsByTagName('material-linear-progress')[0];
+        loadingBar.children[0].setAttributeNode(attr);
+        Array.prototype.forEach.call(loadingBar.children[0].children, function(child){
+          var attr = document.createAttribute('style');
+          attr.value = 'position: absolute; height: 15px';
+          child.setAttributeNode(attr);
+        });
+        attr = void 0;
+
         /************************************************************
         THREEjs setup 
         ************************************************************/
         var context = document.getElementsByTagName('dronemodel')[0];
-        var loadingBar = document.getElementsByTagName('material-linear-progress')[0];
         var width = height = 500;
         var scene = new THREE.Scene();
         var camera = new THREE.PerspectiveCamera(75, width/height, 0.1, 1000);
@@ -521,8 +533,8 @@ angular.module('MadProps')
             // camera.position.z = 100;
             // // camera.position.z = 75;
 
-            // _wrapper.rotation.y = THREE.Math.degToRad(-45);
-            // drone.position.setY(-20);
+            _wrapper.rotation.y = THREE.Math.degToRad(135);
+            drone.position.setY(-20);
 
             // _wrapper.rotation.y = THREE.Math.degToRad(90);
             // _wrapper.rotation.z = THREE.Math.degToRad(90);
@@ -544,7 +556,7 @@ angular.module('MadProps')
         };
 
         // the render loop
-        var render = function () {
+        var render = function() {
           if(document.getElementsByTagName('dronemodel').length){
             requestAnimationFrame(render);
           }
