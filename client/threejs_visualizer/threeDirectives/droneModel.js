@@ -111,17 +111,12 @@ angular.module('MadProps')
           // be faster than the other making their index in the child array of their parent inconsistant. To fix this 
           // issue we determine which model is the propeller at runtime.
 
-          // References to the engines
-          var engine1 = null;
-          var engine2 = null;
-          var engine3 = null;
-          var engine4 = null;
-
+          var motors;
           // References to the propellers to be set once the server recieves first throttle data
-          var prop1 = null;
-          var prop2 = null;
-          var prop3 = null;
-          var prop4 = null;
+          var prop1;
+          var prop2;
+          var prop3;
+          var prop4;
           
           {// load all assets async
 
@@ -224,35 +219,41 @@ angular.module('MadProps')
             // load left propeller
             assetLoader(_propellerLeftTEMP, {
               material: propellerColor,
-              pathURL: 'assets/prop_left.stl',
+              pathURL: 'assets/replacementProp.stl',
               scale: 0.55,
-              position: [-1,15,0.4],// DONT TOUCH
+              position: [0,18,-7.5],// DONT TOUCH
               rotation: [
-                THREE.Math.degToRad(-90),// x
+                THREE.Math.degToRad(0),// x
                 THREE.Math.degToRad(0), // y
                 THREE.Math.degToRad(0)  // z
               ]
             }, function(){
-              clockwiseMotor.add(_propellerLeftTEMP.children[0].clone());
-              _propellerLeftTEMP
+              var prop = new THREE.Object3D();
+              prop.add(_propellerLeftTEMP.children[0].clone());
+              prop.name = 'propeller';
+              clockwiseMotor.add(prop);
+              _propellerLeftTEMP = null;
               loadProgress.prop_left = true;
               if(checkProgress()){
                 loadComplete();
               }
             });
-            // load left propeller
+            // load right propeller
             assetLoader(_propellerRightTEMP, {
               material: propellerColor,
-              pathURL: 'assets/prop_right.stl',
+              pathURL: 'assets/replacementProp.stl',
               scale: 0.55,
-              position: [-2.5,15,3],// DONT TOUCH
+              position: [0,18,7.5],// DONT TOUCH
               rotation: [
-                THREE.Math.degToRad(-90),// x
+                THREE.Math.degToRad(-180),// x
                 THREE.Math.degToRad(0), // y
                 THREE.Math.degToRad(0)  // z
               ]
             }, function(){
-              counterClockwiseMotor.add(_propellerRightTEMP.children[0].clone());
+              var prop = new THREE.Object3D();
+              prop.add(_propellerRightTEMP.children[0].clone());
+              prop.name = 'propeller';
+              counterClockwiseMotor.add(prop);
               _propellerRightTEMP = null;
               loadProgress.prop_right = true;
               if(checkProgress()){
@@ -519,15 +520,19 @@ angular.module('MadProps')
             powerswitch.rotation.y = THREE.Math.degToRad(90);
             _wrapper.add(powerswitch);
 
-            var motors = new THREE.Object3D();
+            motors = new THREE.Object3D();
             motors.add(clockwiseMotor.clone());
               motors.children[motors.children.length-1].position.set(63,0,63);
+              motors.children[motors.children.length-1].name = 'motor1';
             motors.add(counterClockwiseMotor.clone());
               motors.children[motors.children.length-1].position.set(-63,0,63);
+              motors.children[motors.children.length-1].name = 'motor2';
             motors.add(clockwiseMotor.clone());
               motors.children[motors.children.length-1].position.set(-63,0,-63);
+              motors.children[motors.children.length-1].name = 'motor3';
             motors.add(counterClockwiseMotor.clone());
               motors.children[motors.children.length-1].position.set(63,0,-63);
+              motors.children[motors.children.length-1].name = 'motor4';
             _wrapper.add(motors);
 
             // camera.position.z = 100;
@@ -568,14 +573,14 @@ angular.module('MadProps')
 
             // check for diff in pitch attitude
             if(newPitch !== currPitch){
-              if( (newPitch < 30 && newPitch > -30) && (Math.abs(newPitch-currPitch) > 1) ){
+              if( (newPitch <= 30 && newPitch >= -30) && (Math.abs(newPitch-currPitch) > 1) ){
                 pitchArr = pitchArr.concat( easeMovement(currPitch, newPitch, 10) );
                 currPitch = newPitch;
               }
             }
             // check for diff in roll attitude
             if(newRoll !== currRoll){
-              if( (newRoll < 30 && newRoll > -30) && (Math.abs(newRoll-currRoll) > 1) ){
+              if( (newRoll <= 30 && newRoll >= -30) && (Math.abs(newRoll-currRoll) > 1) ){
                 rollArr = rollArr.concat( easeMovement(currRoll, newRoll, 10) );
                 currRoll = newRoll;
               }
@@ -592,50 +597,51 @@ angular.module('MadProps')
 
           // rotate each engine's propeller
           if(drone && scope.throttle){
-            if(engine1){
-              if(!prop1){// checks if propeller needs to be referenced
-                engine1.children.forEach(function(mesh){
-                  if(mesh.name === 'propeller'){
-                    prop1 = mesh;// associates the THREEjs mesh with a prop variable for later referencing
-                  }
-                });
-              }else{// propeller has already be assigned to a variable and is ready to be manipulated
-                prop1.rotation.z -= scope.throttle.e1;
-              }
+            if(!prop1){
+              motors.children.forEach(function(motor){
+                if(motor.name === 'motor1'){
+                  motor.children.forEach(function(mesh){
+                    if(mesh.name === 'propeller'){
+                      prop1 = mesh;
+                      console.log(prop1)
+                    }
+                  });
+                }
+
+                if(motor.name === 'motor2'){
+                  motor.children.forEach(function(mesh){
+                    if(mesh.name === 'propeller'){
+                      prop2 = mesh;
+                      console.log(prop2)
+                    }
+                  });
+                }
+
+                if(motor.name === 'motor3'){
+                  motor.children.forEach(function(mesh){
+                    if(mesh.name === 'propeller'){
+                      prop3 = mesh;
+                      console.log(prop3)
+                    }
+                  });
+                }
+
+                if(motor.name === 'motor4'){
+                  motor.children.forEach(function(mesh){
+                    if(mesh.name === 'propeller'){
+                      prop4 = mesh;
+                      console.log(prop4)
+                    }
+                  });
+                }
+              });
+            }else{
+              prop1.rotation.y -= scope.throttle.motor1;
+              prop2.rotation.y += scope.throttle.motor2;
+              prop3.rotation.y -= scope.throttle.motor3;
+              prop4.rotation.y += scope.throttle.motor4;
             }
-            if(engine2){
-              if(!prop2){// checks if propeller needs to be referenced
-                engine2.children.forEach(function(mesh){
-                  if(mesh.name === 'propeller'){
-                    prop2 = mesh;// associates the THREEjs mesh with a prop variable for later referencing
-                  }
-                });
-              }else{// propeller has already be assigned to a variable and is ready to be manipulated
-                prop2.rotation.z -= scope.throttle.e2;
-              }
-            }
-            if(engine3){
-              if(!prop3){// checks if propeller needs to be referenced
-                engine3.children.forEach(function(mesh){
-                  if(mesh.name === 'propeller'){
-                    prop3 = mesh;// associates the THREEjs mesh with a prop variable for later referencing
-                  }
-                });
-              }else{// propeller has already be assigned to a variable and is ready to be manipulated
-                prop3.rotation.z += scope.throttle.e3;
-              }
-            }
-            if(engine4){
-              if(!prop4){// checks if propeller needs to be referenced
-                engine4.children.forEach(function(mesh){
-                  if(mesh.name === 'propeller'){
-                    prop4 = mesh;// associates the THREEjs mesh with a prop variable for later referencing
-                  }
-                });
-              }else{// propeller has already be assigned to a variable and is ready to be manipulated
-                prop4.rotation.z += scope.throttle.e4;
-              }
-            }
+
           }
 
           renderer.render(scene, camera);

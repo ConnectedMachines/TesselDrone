@@ -13,10 +13,12 @@ angular.module('MadProps')
     // update throttle of engines when new data is available
     $scope.$on('attitudeData', function(){
       var data = arguments[1];
+      console.log(data)
       $scope.attitude = data;
     });
     $scope.$on('throttleData', function(){
       var data = arguments[1];
+      console.log(data)
       $scope.throttle = data;
     })
   }]);
