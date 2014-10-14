@@ -100,7 +100,7 @@ angular.module('MadProps')
 
         {/************ 3D Workspace upper edge ******************/
           var bodyColor = new THREE.MeshLambertMaterial({color: 0xffffff});
-          var propellerColor = new THREE.MeshLambertMaterial({color: 0xffffff});
+          var propellerColor = new THREE.MeshLambertMaterial({color: 0x333333});
           var motorColor = new THREE.MeshLambertMaterial({color: 0x0578FF});
 
           var tesselBoard_boardColor = new THREE.MeshLambertMaterial({color: 0xD60000});
@@ -584,6 +584,11 @@ angular.module('MadProps')
         var render = function() {
           if(document.getElementsByTagName('dronemodel').length){
             requestAnimationFrame(render);
+          }
+
+          if(drone && scope.$parent._tumble){
+            drone.rotation.x += 0.01;
+            drone.rotation.y += 0.01;
           }
 
           //set attitude of drone
