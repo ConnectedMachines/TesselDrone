@@ -24,7 +24,7 @@ angular.module('MadProps')
         ************************************************************/
         var windowResize = function(renderer, camera){
           var callback = function(){
-            renderer.setSize($window.innerWidth/2 - 150, $window.innerWidth/2 - 150);
+            renderer.setSize($window.innerWidth/2 - 200, $window.innerWidth/2 - 200);
             camera.aspect = 1;
             camera.updateProjectionMatrix();
           }
@@ -38,7 +38,7 @@ angular.module('MadProps')
         }
 
         var context = document.getElementsByTagName('dronemodel')[0];
-        var width = height = $window.innerWidth/2 -50;
+        var width = height = $window.innerWidth/2 - 200;
         var scene = new THREE.Scene();
         var camera = new THREE.PerspectiveCamera(75, width/height, 0.1, 1000);
         var renderer = new THREE.WebGLRenderer();

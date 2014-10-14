@@ -9,8 +9,8 @@ angular.module('MadProps')
 
           // create the svg element inside the container
           var context = {
-            width: $window.innerWidth/2 - 150,// these values are the same for a reason
-            height: $window.innerWidth/2 - 150// NOT an error. They were given different names to make forming the data easier
+            width: $window.innerWidth/2 - 200,// these values are the same for a reason
+            height: $window.innerWidth/2 - 200// NOT an error. They were given different names to make forming the data easier
           }
 
           var prop1_isActive = false;
@@ -20,8 +20,8 @@ angular.module('MadProps')
 
           var windowResize = function(){
             $window.addEventListener('resize', function(){
-              context.width = $window.innerWidth/2 - 150;
-              context.height = $window.innerWidth/2 - 150;
+              context.width = $window.innerWidth/2 - 200;
+              context.height = $window.innerWidth/2 - 200;
 
               init();
             }, false);            

@@ -6,18 +6,16 @@
  *  and in the darkness fly them. 
  */
 
+/*  Performance testing:
+ *  Date.now() +10ms
+ *  PID() +5ms
+ *  console.logging +85ms
+ *  accel.on('data') +???ms
+ *  servo.move() +???ms
+ */
+
+
 // var accelResolution = 0.0;
-var PROPORTION = 5;
-var DERIVATION = 0;//0.001*1000;
-var INTEGRATION = 0;//0.1/1000;
-
-
-
-
-
-
-
-
 
 var pct2PWM = function pct2PWM(percent){
   // 100% -> .125
@@ -72,19 +70,23 @@ var prevGlobTime;
  * PID CALCULUS HELL 
  *******************/
 
-var PID = function PID(errorX, errorY, prevErrorX, prevErrorY, sumErrorsX, sumErrorsY) {
+var PID = function PID(errorX, errorY) {
+  var PROPORTION = 10; //* error
+  var INTEGRATION = -1; //* sumErrors (= error * deltaTime)
+  var DERIVATION = 1; //* deltaError / deltaTime
 
   // Calculate time elapsed since previous calculation.
-  var time = Date.now();
-  var deltaTime = (time - prevGlobTime);
-  prevGlobTime = time;
+  var time = Date.now(); // Getting the time delta takes ~10ms
+  // in seconds, not ms.
+  var deltaTime = (time - prevGlobTime)/1000;
+  prevGlobTime = time; //TODO rename
 
   // Add current error to sum of errors.
   // Fix this - reason for this current condition is time will evaluate high the first call through
   if (Math.abs(deltaTime) < 10000000){
     sumErrorsX += errorX * deltaTime;
     sumErrorsY += errorY * deltaTime;
-  } else {console.log('we\'re fucked');}
+  }
 
   var deltaErrorX = errorX - prevErrorX;
   var Px = PROPORTION * errorX;
@@ -94,7 +96,7 @@ var PID = function PID(errorX, errorY, prevErrorX, prevErrorY, sumErrorsX, sumEr
 
   var deltaErrorY = errorY - prevErrorY;
   var Py = PROPORTION * errorY;
-  var Iy = INTEGRATION * sumErrorsY;
+  var Iy = INTEGRATION * sumErrorsY; // O(10's)
   var Dy = DERIVATION * deltaErrorY / deltaTime;
   var PIDy = Py + Iy + Dy; 
 
@@ -105,8 +107,17 @@ var PID = function PID(errorX, errorY, prevErrorX, prevErrorY, sumErrorsX, sumEr
     1: -1*PIDx/2,
     2: PIDx/2,
     3: PIDy/2,
-    4: -1*PIDy/2
+    4: -1*PIDy/2,
+    // logging
+    deltaTime: deltaTime,
+    Px: Px,
+    Py: Py,
+    Ix: Ix,
+    Iy: Iy,
+    Dx: Dx,
+    Dy: Dy,
   };
+
   return correction;
 };
 
@@ -220,41 +231,51 @@ var launch = function launch(){
       // errorX = Math.abs(errorX) < accelResolution ? 0 : errorX;
       // errorY = Math.abs(errorY) < accelResolution ? 0 : errorY;
 
-      var correction = PID( errorX, errorY, prevErrorX, prevErrorY, sumErrorsX, sumErrorsY );
+      var correction = PID( errorX, errorY );
+      console.log('\ncalibrated errorX', errorX, 'calibrated errorY', errorY, 'deltaTime', correction.deltaTime, '\n'+
+        'Px', correction.Px.toFixed(3), 'Ix', correction.Ix.toFixed(3), 'Dx', correction.Dx.toFixed(3), 'sumErrorsX', sumErrorsX.toFixed(3),  '\n'+
+        'Py', correction.Py.toFixed(3), 'Iy', correction.Iy.toFixed(3), 'Dy', correction.Dy.toFixed(3), 'sumErrorsY', sumErrorsY.toFixed(3), '\n'+
+        '1+X: throttle', motor1Throttle.toFixed(3), 'correction', correction[1].toFixed(3), '\n'+
+        '2-X: throttle', motor2Throttle.toFixed(3), 'correction', correction[2].toFixed(3), '\n'+
+        '3-Y: throttle', motor3Throttle.toFixed(3), 'correction', correction[3].toFixed(3), '\n'+
+        '4+Y: throttle', motor4Throttle.toFixed(3), 'correction', correction[4].toFixed(3));        
       // Move each motor.
-      // console.log('\nerrorX', errorX, 'errorY', errorY, 'xyz[0]', xyz[0], 'xyz[1]', xyz[1],'\n'+
-      //   '1+X: throttle', motor1Throttle.toFixed(3), 'correction', correction[1].toFixed(3), 'pct2PWM',pct2PWM(motor1Throttle), '\n'+
-      //   '2-X: throttle', motor2Throttle.toFixed(3), 'correction', correction[2].toFixed(3), 'pct2PWM',pct2PWM(motor2Throttle), '\n'+
-      //   '3-Y: throttle', motor3Throttle.toFixed(3), 'correction', correction[3].toFixed(3), 'pct2PWM',pct2PWM(motor3Throttle), '\n'+
-      //   '4+Y: throttle', motor4Throttle.toFixed(3), 'correction', correction[4].toFixed(3), 'pct2PWM',pct2PWM(motor4Throttle));
       if ( motor1Throttle + correction[1] >= 0 && motor1Throttle + correction[1] <= maxThrottle){
-        servo.move(1, pct2PWM( motor1Throttle + correction[1] ), function(){
-          motor1Throttle = motor1Throttle + correction[1];
-          currentlyMoving === 3 ? currentlyMoving = 0 : currentlyMoving++;
+        setImmediate(function(){
+          servo.move(1, pct2PWM( motor1Throttle + correction[1] ), function(){
+            motor1Throttle = motor1Throttle + correction[1];
+            currentlyMoving === 3 ? currentlyMoving = 0 : currentlyMoving++;
+          });
         });
       } else {
         currentlyMoving === 3 ? currentlyMoving = 0 : currentlyMoving++;
       }
       if ( motor2Throttle + correction[2] >= 0 && motor2Throttle + correction[2] <= maxThrottle){
-        servo.move(2, pct2PWM( motor2Throttle + correction[2] ), function(){
-          motor2Throttle = motor2Throttle + correction[2];
-          currentlyMoving === 3 ? currentlyMoving = 0 : currentlyMoving++;
+        setImmediate(function(){
+          servo.move(2, pct2PWM( motor2Throttle + correction[2] ), function(){
+            motor2Throttle = motor2Throttle + correction[2];
+            currentlyMoving === 3 ? currentlyMoving = 0 : currentlyMoving++;
+          });
         });
       } else {
         currentlyMoving === 3 ? currentlyMoving = 0 : currentlyMoving++;
       }
       if ( motor3Throttle + correction[3] >= 0 && motor3Throttle + correction[3] <= maxThrottle){
-        servo.move(3, pct2PWM( motor3Throttle + correction[3] ), function(){
-          motor3Throttle = motor3Throttle + correction[3];
-          currentlyMoving === 3 ? currentlyMoving = 0 : currentlyMoving++;
+        setImmediate(function(){
+          servo.move(3, pct2PWM( motor3Throttle + correction[3] ), function(){
+            motor3Throttle = motor3Throttle + correction[3];
+            currentlyMoving === 3 ? currentlyMoving = 0 : currentlyMoving++;
+          });
         });
       } else {
         currentlyMoving === 3 ? currentlyMoving = 0 : currentlyMoving++;
       }
       if ( motor4Throttle + correction[4] >= 0 && motor4Throttle + correction[4] <= maxThrottle){
-        servo.move(4, pct2PWM( motor4Throttle + correction[4] ), function(){
-          motor4Throttle = motor4Throttle + correction[4];
-          currentlyMoving === 3 ? currentlyMoving = 0 : currentlyMoving++;
+        setImmediate(function(){
+          servo.move(4, pct2PWM( motor4Throttle + correction[4] ), function(){
+            motor4Throttle = motor4Throttle + correction[4];
+            currentlyMoving === 3 ? currentlyMoving = 0 : currentlyMoving++;
+          });
         });
       } else {
         currentlyMoving === 3 ? currentlyMoving = 0 : currentlyMoving++;
