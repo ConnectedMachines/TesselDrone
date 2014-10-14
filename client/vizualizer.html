@@ -14,8 +14,10 @@
 
   <!-- visualization -->
   <section layout="vertical" layout-sm="horizontal" layout-align="center center" ng-controller="MasterController">
-    <dronestatus ng-controller="D3visualizerController" class="models"></dronestatus>
-    <dronemodel ng-controller="THREEvisualizerController" class="models"></dronemodel>
+    <dronestatus ng-controller="D3visualizerController" style="position: absolute; left: 100" class="models"></dronestatus>
+    <dronemodel ng-controller="THREEvisualizerController" style="position: absolute; right: 100" class="models">
+      <material-linear-progress mode="indeterminate" style="position: absolute; top: 250; height: 20px; width: 88%"></material-linear-progress>
+    </dronemodel>
   </section>
 
   <!-- visualization -->
