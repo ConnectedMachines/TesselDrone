@@ -1,10 +1,10 @@
 .title {
   padding-left: 8px;
-  color: #40bf5f;
+  color: #000;
   margin-bottom: 0;
 }
 .index {
-  background-color: #414b4b;
+  background-color: #000;
 }
 .material-button-raised {
   margin: 2em;
@@ -22,13 +22,67 @@
   margin: 8px;
   padding: 8px;
 }
-.card:hover {
-  background-color: #808080;
-}
 .networkdiagram {
   width: 100%;
   height: 100%;
 }
 .tabs {
   border-style: none;
+}
+.models {
+  box-sizing: border-box;
+  box-shadow: 0px 5px 10px 0 rgba(0,0,0,0.26);
+  margin: 2em;
+  padding: 2em;
+}
+.tabs {
+  color: #01b0f0;
+}
+.tabs-header {
+  background-color: #000;
+}
+.tabs-header-items {
+  font-size: 1.5em;
+}
+.github {
+  color: #01b0f0;
+}
+.animate {
+  background: #ff358b;
+}
+material-tab.active {
+  color: #ff358b;
+}
+material-button {
+  padding: 0 2em 0 2em;
+}
+.material-flex {
+  color: #000;
+}
+span {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+.card:hover {
+  background-color: #333;
+}
+.card:hover {
+  color: #fff;
+}
+.material-tile-content h4 {
+  color: #333;
+  margin: 0.5em 0 0.5em 0;
+  font-wight: 500;
+}
+.material-tile-content h2 {
+  color: #333;
+  font-weight: 700;
+}
+.material-tile-content p {
+  color: #333;
+  font-size: 1em;
 }

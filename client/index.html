@@ -3,9 +3,9 @@
     <title>TesselDrone</title>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
     <!-- <base href="/"> -->
+    <link rel="stylesheet" href="../bower_components/angular-material/angular-material.css">
     <link rel="stylesheet" type="text/css" href="main.css">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../bower_components/angular-material/angular-material.css">
   </head>
   <body ng-app="MadProps">
     <!-- dependency scripts -->
@@ -34,17 +34,13 @@
     <!-- nav-bar -->
       
     <material-toolbar class="toolbar">
-      <div class="material-toolbar-tools">
-        <h2>Connected Machines: TesselDrone</h2>
-            <a href="http://connectedmachines.tumblr.com/"><i class="fa fa-tumblr"></i></a>
-            <a href="https://github.com/ConnectedMachines/MadProps"><i class="fa fa-github"></i></a>
-            <a href="https://twitter.com/TesselDrone"<i class="fa fa-twitter"></i></a>
-      </div>
       <material-tabs>
         <material-tab class="tabs" label="HOME" ui-sref="home"></material-tab>
         <material-tab class="tabs" label="TEAM" ui-sref="team"></material-tab>
         <material-tab class="tabs" label="ABOUT" ui-sref="about"></material-tab>
         <material-tab class="tabs" label="BLOG" ui-sref="blog"></material-tab>
+        <material-tab class="tabs"><a href="https://github.com/ConnectedMachines/MadProps" class="github"><i class="fa fa-github-square fa-6" style="font-size: 1.5em"><span></span></i></a>
+        </material-tab>
       </material-tabs>
     </material-toolbar>
     

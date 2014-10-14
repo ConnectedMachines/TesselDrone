@@ -4,7 +4,7 @@ angular.module('MadProps')
       restrict: 'EA',
       link: function(scope, element, attrs){
           // create the svg element inside the container
-          var width = height = 480;
+          var width = height = 500;
 
           var propellerData = [
             {
