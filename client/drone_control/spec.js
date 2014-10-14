@@ -12,7 +12,7 @@ describe('DroneCommandController', function() {
   }));
 
   it('drone status should start at idle', function() {
-    expect(scope.drone.status).toEqual('Idle');
+    expect(scope.drone.status).toEqual('IDLE');
   });
   
   it('should have a takeoff function', function(){
@@ -20,9 +20,9 @@ describe('DroneCommandController', function() {
   });
     
   it('should resolve status to taking off', function(){    
-    expect(scope.drone.status).toEqual('Idle');
+    expect(scope.drone.status).toEqual('IDLE');
     scope.takeOff();
-    expect(scope.drone.status).toEqual('Taking Off');
+    expect(scope.drone.status).toEqual('TAKING OFF');
   });
 
   it('should emit a take off condition', function(){
@@ -35,9 +35,9 @@ describe('DroneCommandController', function() {
   });
 
   it('should resolve status to landing', function(){
-    expect(scope.drone.status).toEqual('Idle');
+    expect(scope.drone.status).toEqual('IDLE');
     scope.land();
-    expect(scope.drone.status).toEqual('Landing');
+    expect(scope.drone.status).toEqual('LANDING');
   });  
 
   it('should emit a land condition', function(){
@@ -50,9 +50,9 @@ describe('DroneCommandController', function() {
   });
 
   it('should resolve status to checking motors', function(){
-    expect(scope.drone.status).toEqual('Idle');
+    expect(scope.drone.status).toEqual('IDLE');
     scope.preflight();
-    expect(scope.drone.status).toEqual('Checking Motors');
+    expect(scope.drone.status).toEqual('CHECKING MOTORS');
   });  
 
   it('should emit a preflight condition', function(){
