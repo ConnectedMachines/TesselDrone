@@ -7,6 +7,9 @@ angular.module('MadProps')
         var attr = document.createAttribute('style');
         attr.value = 'height: 15px;';
 
+        console.log('INNER:  height='+ $window.innerHeight+'  width='+$window.innerWidth);
+        console.log('OUTER:  height='+ $window.outerHeight+'  width='+$window.outerWidth);
+
         var loadingBar = document.getElementsByTagName('material-linear-progress')[0];
         loadingBar.children[0].setAttributeNode(attr);
         Array.prototype.forEach.call(loadingBar.children[0].children, function(child){
@@ -19,13 +22,30 @@ angular.module('MadProps')
         /************************************************************
         THREEjs setup 
         ************************************************************/
+        var windowResize = function(renderer, camera){
+          var callback = function(){
+            renderer.setSize($window.innerWidth/2 - 150, $window.innerWidth/2 - 150);
+            camera.aspect = 1;
+            camera.updateProjectionMatrix();
+          }
+
+          $window.addEventListener('resize', callback, false);
+          return {
+            stop: function(){
+              $window.removeEventListener('resize', callback);
+            }
+          };
+        }
+
         var context = document.getElementsByTagName('dronemodel')[0];
-        var width = height = 500;
+        var width = height = $window.innerWidth/2 -50;
         var scene = new THREE.Scene();
         var camera = new THREE.PerspectiveCamera(75, width/height, 0.1, 1000);
         var renderer = new THREE.WebGLRenderer();
         renderer.setSize(width, height);
         context.appendChild(renderer.domElement);
+
+        windowResize(renderer, camera);
 
         // create colored background skybox                                 edit this to change color: 0x######
         scene.add( new THREE.Mesh(new THREE.BoxGeometry(300,300,300), new THREE.MeshBasicMaterial({color: 0xffffff, side: THREE.BackSide})) );
