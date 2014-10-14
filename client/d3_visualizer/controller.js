@@ -10,9 +10,18 @@ angular.module('MadProps')
     }
     loop();
 
+    $scope.$on('throttleData', function(){
+      var data = arguments[1];
+      console.log(data)
+      setEngine1(data.motor1);
+      setEngine2(data.motor2);
+      setEngine3(data.motor3);
+      setEngine4(data.motor4);
+    })
+
     var setEngine1 = function(data){
       if(data > 0.6){
-        $scope.renderEngine1('#FF0000', true);// red
+        $scope.renderEngine1('#707070', true);// red
       }else if(data > 0.5){
         $scope.renderEngine1('#FF6600', true);// orange
       }else if(data > 0.4){
@@ -26,7 +35,7 @@ angular.module('MadProps')
 
     var setEngine2 = function(data){
       if(data > 0.6){
-        $scope.renderEngine2('#FF0000', true);// red
+        $scope.renderEngine2('#707070', true);// red
       }else if(data > 0.5){
         $scope.renderEngine2('#FF6600', true);// orange
       }else if(data > 0.4){
@@ -40,7 +49,7 @@ angular.module('MadProps')
 
     var setEngine3 = function(data){
       if(data > 0.6){
-        $scope.renderEngine3('#FF0000', true);// red
+        $scope.renderEngine3('#707070', true);// red
       }else if(data > 0.5){
         $scope.renderEngine3('#FF6600', true);// orange
       }else if(data > 0.4){
@@ -54,7 +63,7 @@ angular.module('MadProps')
 
     var setEngine4 = function(data){
       if(data > 0.6){
-        $scope.renderEngine4('#FF0000', true);// red
+        $scope.renderEngine4('#707070', true);// red
       }else if(data > 0.5){
         $scope.renderEngine4('#FF6600', true);// orange
       }else if(data > 0.4){
