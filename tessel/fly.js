@@ -169,7 +169,7 @@ var checkModules = function checkModules(){
   // Continue looping until the user is ready.
   setImmediate(function(){
     if (isAccelModuleReady && isServoModuleReady){ 
-
+      console.log('Calibrate ESC now (100 enter 0 enter 2 enter)');
       process.stdin.resume();
       servo.configure(1, 0, 1, function(){
         process.stdin.on('data', function (percent) {
