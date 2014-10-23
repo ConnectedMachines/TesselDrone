@@ -286,7 +286,7 @@ angular.module('MadProps')
             // load board
             assetLoader(tesselBoard, {
               material: tesselBoard_boardColor,
-              pathURL: 'assets/tesselBoard_board.stl',
+              pathURL: 'assets/tesselboard_board.stl',
               scale: 0.5,
               position: [0,0,0],
               rotation: [
@@ -303,7 +303,7 @@ angular.module('MadProps')
             // load decorations
             assetLoader(tesselBoard, {
               material: tesselBoard_decoColor,
-              pathURL: 'assets/tesselBoard_deco.stl',
+              pathURL: 'assets/tesselboard_deco.stl',
               scale: 0.5,
               position: [0,0,0],
               rotation: [
