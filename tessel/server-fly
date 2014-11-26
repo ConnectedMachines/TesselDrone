@@ -131,7 +131,7 @@ servo.on('ready', function(){
  * CALIBRATE ACCEL 
  *******************/
 
-// DON'T FUCKING CHANGE THIS vv ANYONE!
+// DON'T CHANGE THIS vv ANYONE!
 var accelReadsPerSecond = 12.5;
 var accelMaxGs = 2;
 var isAccelModuleReady = false;
